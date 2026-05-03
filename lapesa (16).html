@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lapesa – Learn Spanish</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:#F9F7FF;color:#333;overflow-x:hidden}
+.screen{display:none}.screen.active{display:block}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:#fff;border-bottom:2.5px solid #A78BFA;position:sticky;top:0;z-index:100}
+.logo{font-size:20px;font-weight:900;color:#5B2FCC;cursor:pointer;letter-spacing:-0.5px}
+.logo em{color:#00C9A7;font-style:normal}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid #EDE5FF;display:flex;z-index:99}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 2px 10px;cursor:pointer;font-size:9px;font-weight:700;color:#aaa;gap:2px;border:none;background:none;font-family:'Nunito',sans-serif;transition:color .12s}
+.nav-item.active{color:#5B2FCC}
+.nav-icon{font-size:20px}
+#root{padding-bottom:68px}
+.btn{border:none;border-radius:14px;padding:12px 24px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .12s}
+.btn-purple{background:#5B2FCC;color:#fff;box-shadow:0 4px 0 #3d1fa8}
+.btn-purple:hover{transform:translateY(-2px);box-shadow:0 6px 0 #3d1fa8}
+.btn-mint{background:#00C9A7;color:#fff;box-shadow:0 4px 0 #00a88d}
+.btn-mint:hover{transform:translateY(-2px);box-shadow:0 6px 0 #00a88d}
+.btn-amber{background:#EF9F27;color:#fff;box-shadow:0 4px 0 #c4810f}
+.btn-amber:hover{transform:translateY(-2px);box-shadow:0 6px 0 #c4810f}
+.btn-outline{background:#fff;border:2.5px solid #5B2FCC;color:#5B2FCC;border-radius:14px;padding:11px 22px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer}
+.btn-sm{padding:8px 18px;font-size:13px;border-radius:12px}
+.back-btn{background:#F4F0FF;border:none;border-radius:10px;padding:7px 14px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#5B2FCC;display:inline-flex;align-items:center;gap:6px}
+.q-box{background:#fff;border-radius:18px;padding:24px;border:2.5px solid #EDE5FF;margin-bottom:14px;text-align:center;box-shadow:0 4px 0 #EDE5FF}
+.q-tag{display:inline-block;font-size:10px;font-weight:700;color:#00C9A7;background:#E0FAF5;border-radius:99px;padding:3px 9px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.choice-btn{background:#fff;border:2.5px solid #E0E0E0;border-radius:13px;padding:13px 8px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#333;transition:all .12s;text-align:center}
+.choice-btn:hover:not(:disabled){border-color:#00C9A7;color:#00C9A7;transform:translateY(-2px)}
+.choice-btn.correct{background:#E0FAF4;border-color:#00C9A7;color:#007A6A}
+.choice-btn.wrong{background:#FFE8E8;border-color:#FF6B6B;color:#CC3333}
+.choice-btn:disabled{cursor:default}
+.fill-input{font-family:'Nunito',sans-serif;font-size:19px;font-weight:700;text-align:center;padding:11px 20px;border:2.5px solid #E0E0E0;border-radius:13px;width:230px;outline:none;transition:border-color .15s;color:#333;background:#fff}
+.fill-input:focus{border-color:#5B2FCC}
+.fill-input.correct{border-color:#00C9A7;background:#E0FAF4;color:#007A6A}
+.fill-input.wrong{border-color:#FF6B6B;background:#FFE8E8;color:#CC3333}
+.feedback{border-radius:13px;padding:13px 18px;margin-top:10px;display:none;align-items:center;gap:10px;font-weight:700}
+.feedback.correct{background:#E0FAF4;border:2px solid #00C9A7;color:#007A6A;display:flex}
+.feedback.wrong{background:#FFE8E8;border:2px solid #FF6B6B;color:#CC3333;display:flex}
+.match-item{background:#fff;border:2.5px solid #E0E0E0;border-radius:13px;padding:9px 10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#333;transition:all .12s;text-align:center}
+.match-item:hover:not(.matched){border-color:#9B59B6;color:#9B59B6}
+.match-item.selected{border-color:#5B2FCC;background:#F4F0FF;color:#5B2FCC}
+.match-item.matched{border-color:#00C9A7;background:#E0FAF4;color:#007A6A;cursor:default}
+.match-item.wrong-flash{border-color:#FF6B6B;background:#FFE8E8;animation:shake .3s}
+.spd-choice{background:#fff;border:2.5px solid #E0E0E0;border-radius:13px;padding:13px 8px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#333;transition:all .1s;text-align:center}
+.spd-choice:hover:not(:disabled){border-color:#00C9A7;transform:translateY(-2px)}
+.spd-choice.correct{background:#E0FAF4;border-color:#00C9A7;color:#007A6A}
+.spd-choice.wrong{background:#FFE8E8;border-color:#FF6B6B;color:#CC3333}
+.spd-choice:disabled{cursor:default}
+.fc-card-wrap{perspective:1000px;margin-bottom:18px;cursor:pointer}
+.fc-card{width:100%;min-height:200px;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 18px;backface-visibility:hidden;text-align:center}
+.fc-front{background:#fff;border:3px solid #D5F0E0;box-shadow:0 4px 0 #D5F0E0}
+.fc-back{background:#27AE60;border:3px solid #1a7a42;box-shadow:0 4px 0 #1a7a42;transform:rotateY(180deg)}
+.ws-tile{width:32px;height:38px;background:#fff;border:2.5px solid #9B59B6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#9B59B6;cursor:pointer;transition:all .12s;user-select:none}
+.ws-tile.empty{border-style:dashed;border-color:#DDD;background:#FAFAFA;color:transparent;cursor:default}
+.ws-tile.correct-tile{background:#E0FAF4;border-color:#00C9A7;color:#007A6A}
+.ws-tile.wrong-tile{background:#FFE8E8;border-color:#FF6B6B;color:#CC3333}
+.ws-bank-tile{width:36px;height:42px;background:#9B59B6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;cursor:pointer;transition:all .12s;user-select:none;box-shadow:0 3px 0 #6c3483}
+.ws-bank-tile:hover{transform:translateY(-3px);box-shadow:0 6px 0 #6c3483}
+.ws-bank-tile.used{opacity:0;pointer-events:none}
+.bp-arena{position:relative;height:250px;overflow:hidden;border-radius:14px;background:linear-gradient(180deg,#EBF5FB,#D6EAF8);border:2px solid #D6EAF8;margin-bottom:10px}
+.bubble{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;text-align:center;padding:6px;line-height:1.2;border:3px solid rgba(255,255,255,.6);box-shadow:0 4px 12px rgba(0,0,0,.12);animation:riseUp linear forwards;user-select:none}
+.bubble.pop-correct{animation:popCorrect .35s ease forwards!important}
+.bubble.pop-wrong{animation:popWrong .35s ease forwards!important}
+.daily-banner{background:linear-gradient(135deg,#5B2FCC 0%,#7C5CBF 100%);border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:14px;margin-bottom:12px;cursor:pointer;transition:transform .12s}
+.daily-banner:hover{transform:translateY(-2px)}
+/* ── SRS styles ── */
+.review-banner{background:linear-gradient(135deg,#EF9F27 0%,#F5C842 100%);border-radius:18px;padding:16px 20px;display:flex;align-items:center;gap:14px;margin-bottom:12px;cursor:pointer;transition:transform .12s}
+.review-banner:hover{transform:translateY(-2px)}
+.srs-card{background:#fff;border-radius:20px;padding:26px 20px;border:3px solid #FAEEDA;box-shadow:0 6px 0 #FAEEDA;text-align:center;margin-bottom:14px;transition:border-color .2s,background .2s}
+.srs-card.flash-correct{border-color:#00C9A7!important;background:#E0FAF4!important}
+.srs-card.flash-wrong{border-color:#FF6B6B!important;background:#FFE8E8!important;animation:shake .35s}
+.srs-strength-bar{height:7px;border-radius:99px;background:#EDE5FF;overflow:hidden;margin-top:8px}
+.srs-strength-fill{height:100%;border-radius:99px;transition:width .6s ease,background .4s}
+.srs-mc-btn{background:#fff;border:2.5px solid #E0E0E0;border-radius:13px;padding:12px 8px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#333;transition:all .12s;text-align:center;width:100%}
+.srs-mc-btn:hover:not(:disabled){border-color:#EF9F27;color:#EF9F27;transform:translateY(-2px)}
+.srs-mc-btn.correct{background:#E0FAF4;border-color:#00C9A7;color:#007A6A}
+.srs-mc-btn.wrong{background:#FFE8E8;border-color:#FF6B6B;color:#CC3333}
+.srs-mc-btn:disabled{cursor:default}
+.srs-fill-input{font-family:'Nunito',sans-serif;font-size:18px;font-weight:700;text-align:center;padding:10px 18px;border:2.5px solid #E0E0E0;border-radius:13px;width:220px;outline:none;transition:border-color .15s;color:#333;background:#fff}
+.srs-fill-input:focus{border-color:#EF9F27}
+.srs-fill-input.correct{border-color:#00C9A7;background:#E0FAF4;color:#007A6A}
+.srs-fill-input.wrong{border-color:#FF6B6B;background:#FFE8E8;color:#CC3333}
+.strength-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin:0 2px}
+.section-pillar{border-radius:18px;padding:20px 16px;cursor:pointer;text-align:center;transition:all .15s;border:3px solid transparent}
+.section-pillar:hover{transform:translateY(-3px)}
+.pillar-vocab{background:#F4F0FF;border-color:#A78BFA}
+.pillar-sent{background:#E0FAF4;border-color:#00C9A7}
+.pillar-cult{background:#FAEEDA;border-color:#EF9F27}
+.video-embed{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:14px;border:3px solid #EDE5FF;margin-bottom:14px;box-shadow:0 4px 0 #EDE5FF}
+.video-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%}
+.stat-big{background:#fff;border-radius:14px;padding:16px;border:2px solid #EDE5FF;text-align:center}
+.stat-big .n{font-size:28px;font-weight:900;color:#5B2FCC}
+.stat-big .l{font-size:11px;color:#aaa;font-weight:700;margin-top:2px}
+.stat-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes riseUp{0%{transform:translateY(0);opacity:1}90%{opacity:1}100%{transform:translateY(-300px);opacity:0}}
+@keyframes popCorrect{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(0);opacity:0}}
+@keyframes popWrong{0%{transform:scale(1)}50%{transform:scale(.8)}100%{transform:scale(0);opacity:0}}
+@keyframes countPop{0%{transform:scale(1.6);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-55px)}}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes starPop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.3);opacity:1}100%{transform:scale(1);opacity:1}}
+.animate-in{animation:fadeIn .3s ease}
+.float-score{position:fixed;font-size:18px;font-weight:900;pointer-events:none;animation:floatUp .9s ease forwards;z-index:9999}
+.confetti-piece{position:fixed;top:-10px;border-radius:2px;animation:fall linear forwards;z-index:9999;pointer-events:none}
+.countdown-overlay{position:fixed;inset:0;background:rgba(249,247,255,.96);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px}
+.countdown-num{font-size:110px;font-weight:900;color:#5B2FCC;animation:countPop .65s ease}
+.page{max-width:680px;margin:0 auto;padding:18px 16px}
+.section-label{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+footer{text-align:center;padding:20px 14px 8px;font-size:12px;color:#bbb;border-top:2px solid #EDE5FF;background:#fff}
+footer strong{color:#5B2FCC}
+
+
+/* HOME SECTION CARDS */
+.home-section-card{background:var(--card-bg,#F4F0FF);border:2.5px solid var(--card-color,#5B2FCC);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;transition:all .15s}
+.home-section-card:hover{transform:translateY(-4px);box-shadow:0 6px 0 var(--card-color,#5B2FCC)}
+.hsc-icon{font-size:30px;margin-bottom:8px}
+.hsc-title{font-size:15px;font-weight:900;color:#333;margin-bottom:4px}
+.hsc-sub{font-size:11px;color:#888;font-weight:600}
+
+/* GRAMMAR */
+.gram-lesson-card{background:#fff;border-radius:18px;padding:22px 18px;border:3px solid #EDE5FF;box-shadow:0 5px 0 #EDE5FF;margin-bottom:14px}
+.gram-rule{background:#F4F0FF;border-left:4px solid #5B2FCC;border-radius:0 10px 10px 0;padding:12px 14px;margin:10px 0;font-size:14px;font-weight:700;color:#3d1fa8;line-height:1.5}
+.gram-example{display:flex;align-items:baseline;gap:8px;padding:7px 0;border-bottom:1px solid #EDE5FF}
+.gram-es{font-size:15px;font-weight:800;color:#5B2FCC;min-width:140px}
+.gram-en{font-size:13px;color:#888;font-weight:600}
+.gram-mc-btn{background:#fff;border:2.5px solid #E0E0E0;border-radius:13px;padding:12px 10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#333;transition:all .12s;text-align:center;width:100%}
+.gram-mc-btn:hover:not(:disabled){border-color:#5B2FCC;color:#5B2FCC;transform:translateY(-2px)}
+.gram-mc-btn.correct{background:#E0FAF4;border-color:#00C9A7;color:#007A6A}
+.gram-mc-btn.wrong{background:#FFE8E8;border-color:#FF6B6B;color:#CC3333}
+.gram-mc-btn:disabled{cursor:default}
+.gram-topic-card{background:#fff;border-radius:16px;padding:18px 14px;border:2.5px solid #EDE5FF;cursor:pointer;transition:all .15s;text-align:center}
+.gram-topic-card:hover{transform:translateY(-3px);border-color:#5B2FCC;box-shadow:0 5px 0 #5B2FCC}
+</style>
+</head>
+<body>
+<div id="root">
+
+<div class="hdr">
+  <div class="logo" onclick="nav('home')">La<em>pesa</em> ⚡</div>
+    <div style="display:flex;align-items:center;gap:10px">
+    <button id="replayBtn" onclick="replayLastWord(this)" style="background:#F4F0FF;border:1.5px solid #A78BFA;border-radius:20px;padding:4px 12px;cursor:pointer;font-size:15px;font-family:'Nunito',sans-serif;line-height:1;transition:all .12s" title="Replay last word">▶️</button>
+    <div style="display:flex;align-items:center;gap:6px;background:#F4F0FF;border-radius:20px;padding:5px 12px;border:1.5px solid #A78BFA">
+      <span style="font-size:13px;font-weight:800;color:#EF9F27" id="streakNum">0</span><span style="font-size:12px">🔥</span>
+      <span style="width:1px;height:14px;background:#D4C5F9;display:inline-block"></span>
+      <span style="font-size:13px;font-weight:800;color:#5B2FCC" id="xpLabel">0 XP</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen active" id="homeScreen">
+  <div class="page">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <div>
+        <h2 style="font-size:24px;font-weight:900;color:#5B2FCC" id="homeGreeting">¡Hola! 👋</h2>
+        <p style="font-size:13px;color:#aaa;margin-top:2px">Ready to practise Spanish?</p>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:18px;font-weight:900;color:#5B2FCC" id="homeXP">0 XP</div>
+        <div style="font-size:13px;font-weight:700;color:#EF9F27" id="homeStreak">🔥 0</div>
+      </div>
+    </div>
+
+    <!-- Review nudge (dynamic) -->
+    <div id="reviewBannerWrap" style="margin-bottom:10px"></div>
+
+    <!-- Daily challenge -->
+    <div class="daily-banner" id="dailyBanner" onclick="startDaily()" style="margin-bottom:20px">
+      <div style="font-size:32px">🔥</div>
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:900;color:#fff">Daily challenge</div>
+        <div id="dailySub" style="font-size:12px;color:rgba(255,255,255,.8);margin-top:2px">Loading...</div>
+      </div>
+      <div style="background:rgba(255,255,255,.2);border-radius:10px;padding:7px 14px;font-size:13px;font-weight:800;color:#fff">Go! →</div>
+    </div>
+
+    <!-- 4 section cards -->
+    <div class="section-label">What do you want to do?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+      <div class="home-section-card" onclick="nav('vocab')" style="--card-color:#5B2FCC;--card-bg:#F4F0FF">
+        <div class="hsc-icon">📚</div>
+        <div class="hsc-title">Vocabulary</div>
+        <div class="hsc-sub" id="hscVocabSub">30 topics</div>
+      </div>
+      <div class="home-section-card" onclick="nav('grammar')" style="--card-color:#9B59B6;--card-bg:#F9F0FF">
+        <div class="hsc-icon">📖</div>
+        <div class="hsc-title">Grammar</div>
+        <div class="hsc-sub">5 mini-lessons</div>
+      </div>
+      <div class="home-section-card" onclick="nav('sentences')" style="--card-color:#00C9A7;--card-bg:#E0FAF4">
+        <div class="hsc-icon">🧱</div>
+        <div class="hsc-title">Sentences</div>
+        <div class="hsc-sub">3 levels</div>
+      </div>
+      <div class="home-section-card" onclick="nav('culture')" style="--card-color:#EF9F27;--card-bg:#FAEEDA">
+        <div class="hsc-icon">🌍</div>
+        <div class="hsc-title">Culture</div>
+        <div class="hsc-sub">Facts + quiz</div>
+      </div>
+    </div>
+
+    <!-- Keep going / recent -->
+    <div class="section-label">Keep going</div>
+    <div id="recentTopics" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px"></div>
+  </div>
+  <footer><strong>Lapesa</strong> · Free Spanish for KS2</footer>
+</div>
+  <footer><strong>Lapesa</strong> · Free Spanish for KS2</footer>
+</div>
+
+<!-- VOCAB -->
+<div class="screen" id="vocabScreen">
+  <div class="page">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <button class="back-btn" onclick="nav('home')">← Home</button>
+      <h2 style="font-size:20px;font-weight:900;color:#5B2FCC">📚 Vocabulary</h2>
+    </div>
+    <div id="vocabModeTabs" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px"></div>
+    <div class="section-label">Pick a topic</div>
+    <div class="topic-grid" id="topicsGrid"></div>
+  </div>
+</div>
+
+<!-- SENTENCES -->
+<div class="screen" id="sentencesScreen">
+  <div class="page">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <button class="back-btn" onclick="nav('home')" style="background:#E0FAF4;color:#007A6A">← Home</button>
+      <h2 style="font-size:20px;font-weight:900;color:#00C9A7">🧱 Sentence Builder</h2>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px" id="sbLevelTabs"></div>
+    <div id="sbQuestionArea"></div>
+    <div id="sbResults" style="display:none;text-align:center;padding:20px 0">
+      <span id="sbResEmoji" style="font-size:60px;display:block;margin-bottom:10px;animation:bounce .6s ease">🎉</span>
+      <div id="sbResTitle" style="font-size:26px;font-weight:900;color:#00C9A7;margin-bottom:6px"></div>
+      <div id="sbResScore" style="font-size:48px;font-weight:900;color:#5B2FCC;margin:8px 0"></div>
+      <div style="font-size:14px;color:#aaa;margin-bottom:20px">sentences correct</div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button onclick="startSentenceBuilder(currentSbLevel)" class="btn btn-mint">Play again 🧱</button>
+        <button onclick="nav('home')" class="btn btn-outline">Home 🏠</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CULTURE -->
+<div class="screen" id="cultureScreen">
+  <div class="page">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <button class="back-btn" onclick="nav('home')" style="background:#FAEEDA;color:#633806">← Home</button>
+      <h2 style="font-size:20px;font-weight:900;color:#EF9F27">🌍 Culture Corner</h2>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px" id="cultureTabs"></div>
+    <div id="cultureContent"></div>
+  </div>
+</div>
+
+<!-- SMART REVIEW (SRS) -->
+<div class="screen" id="reviewScreen">
+  <div class="page">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <button class="back-btn" onclick="nav('home')" style="background:#FFF8E6;color:#633806">← Home</button>
+      <h2 style="font-size:20px;font-weight:900;color:#EF9F27">🧠 Smart Review</h2>
+    </div>
+    <div id="srsLobby"></div>
+    <div id="srsGame" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="flex:1;height:10px;background:#FAEEDA;border-radius:99px;overflow:hidden">
+          <div id="srsProgFill" style="height:100%;border-radius:99px;background:#EF9F27;transition:width .4s ease;width:0%"></div>
+        </div>
+        <div id="srsQCount" style="font-size:12px;font-weight:700;color:#aaa;white-space:nowrap">0 left</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+        <div style="font-size:14px;font-weight:800;color:#EF9F27">⭐ <span id="srsPoints">0</span> pts</div>
+        <div id="srsMastered" style="font-size:13px;font-weight:700;color:#00C9A7">✅ 0 mastered</div>
+      </div>
+      <div class="srs-card" id="srsCard">
+        <div id="srsModeTag" style="display:inline-block;font-size:10px;font-weight:700;border-radius:99px;padding:3px 9px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;background:#FFF8E6;color:#633806;border:1px solid #EF9F27">Recall</div>
+        <div style="font-size:40px;margin:8px 0" id="srsEmoji">⭐</div>
+        <div id="srsPrompt" style="font-size:13px;font-weight:700;color:#aaa;margin-bottom:6px">What does this mean?</div>
+        <div id="srsWord" style="font-size:24px;font-weight:900;color:#333;margin-bottom:12px">...</div>
+        <div style="font-size:10px;font-weight:700;color:#aaa;text-align:left;margin-bottom:3px">Word strength</div>
+        <div class="srs-strength-bar"><div id="srsStrengthFill" class="srs-strength-fill" style="width:0%"></div></div>
+      </div>
+      <div id="srsAnswerArea"></div>
+      <div id="srsFeedback" style="display:none;border-radius:13px;padding:13px 18px;margin-top:10px;align-items:center;gap:10px;font-weight:700"></div>
+    </div>
+    <div id="srsResults" style="display:none;text-align:center;padding:20px 0"></div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="screen" id="progressScreen">
+  <div class="page">
+    <h2 style="font-size:22px;font-weight:900;color:#5B2FCC;margin-bottom:18px">📊 My Progress</h2>
+    <div class="stat-grid-4" style="margin-bottom:20px">
+      <div class="stat-big"><div class="n" id="progXP">0</div><div class="l">Total XP</div></div>
+      <div class="stat-big"><div class="n" id="progStreak">0</div><div class="l">Day streak</div></div>
+      <div class="stat-big"><div class="n" id="progDone">0</div><div class="l">Topics done</div></div>
+      <div class="stat-big"><div class="n" id="progBadges">0</div><div class="l">Badges</div></div>
+    </div>
+    <div id="srsSummaryBlock" style="margin-bottom:20px"></div>
+    <div class="section-label">Vocabulary progress</div>
+    <div id="progTopicList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
+    <div class="section-label">Best scores</div>
+    <div id="progBestScores" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+  </div>
+</div>
+
+<!-- BADGES -->
+<div class="screen" id="badgesScreen">
+  <div class="page">
+    <h2 style="font-size:22px;font-weight:900;color:#5B2FCC;margin-bottom:6px">🏅 Badges</h2>
+    <p style="font-size:14px;color:#aaa;margin-bottom:18px">Collect them all!</p>
+    <div id="badgesGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px"></div>
+  </div>
+</div>
+
+<!-- WATCH -->
+<div class="screen" id="watchScreen">
+  <div class="page">
+    <h2 style="font-size:22px;font-weight:900;color:#5B2FCC;margin-bottom:6px">📺 Watch & Learn</h2>
+    <p style="font-size:14px;color:#aaa;margin-bottom:18px">Hand-picked videos for each topic</p>
+    <div class="topic-grid" id="watchTopicsGrid"></div>
+  </div>
+</div>
+
+<!-- VIDEO PLAYER -->
+<div class="screen" id="videoScreen">
+  <div class="page">
+    <button class="back-btn" onclick="nav('watch')" style="margin-bottom:14px">← Watch</button>
+    <div id="videoHeader" style="margin-bottom:12px"></div>
+    <div id="videoTabs" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px"></div>
+    <div class="video-embed"><iframe id="videoFrame" src="" allowfullscreen frameborder="0"></iframe></div>
+    <div id="videoMeta"></div>
+    <div style="text-align:center;margin-top:14px">
+      <button id="practiseBtn" onclick="practiseFromVideo()" class="btn btn-purple">Practise this topic 🎯</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPEED -->
+<div class="screen" id="speedScreen">
+  <div class="page">
+    <button class="back-btn" onclick="goHome()" style="margin-bottom:14px">← Topics</button>
+    <div id="speedLobby"></div>
+    <div id="speedGame" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px">
+        <div style="position:relative;width:64px;height:64px;flex-shrink:0">
+          <svg width="64" height="64" viewBox="0 0 64 64" style="transform:rotate(-90deg)"><circle fill="none" stroke="#EDE5FF" stroke-width="5" cx="32" cy="32" r="28"/><circle id="timerRing" fill="none" stroke="#5B2FCC" stroke-width="5" cx="32" cy="32" r="28" stroke-dasharray="175.9" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear,stroke .3s"/></svg>
+          <div id="timerNum" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#5B2FCC">60</div>
+        </div>
+        <div style="text-align:center"><div id="speedScore" style="font-size:32px;font-weight:900;color:#00C9A7">0</div><div style="font-size:11px;color:#aaa;font-weight:700">points</div></div>
+        <div style="text-align:center"><div id="comboBadge" style="background:#A78BFA;color:#fff;font-size:13px;font-weight:900;border-radius:99px;padding:5px 14px;min-width:62px;text-align:center">x1</div><div style="font-size:11px;color:#aaa;font-weight:700;margin-top:3px">combo</div></div>
+      </div>
+      <div id="speedWordBox" style="background:#fff;border-radius:18px;padding:22px;text-align:center;border:3px solid #EDE5FF;margin-bottom:14px;box-shadow:0 4px 0 #EDE5FF;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border-color .12s,background .12s">
+        <span id="speedEmoji" style="font-size:42px;margin-bottom:8px;display:block">⭐</span>
+        <div id="speedPrompt" style="font-size:11px;font-weight:700;color:#aaa;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px">What does this mean?</div>
+        <div id="speedWord" style="font-size:22px;font-weight:900;color:#333">...</div>
+      </div>
+      <div id="speedChoices" style="display:grid;grid-template-columns:1fr 1fr;gap:9px"></div>
+    </div>
+    <div id="speedResults" style="display:none;text-align:center;padding:16px 0"></div>
+  </div>
+</div>
+
+<!-- SCRAMBLE -->
+<div class="screen" id="scrambleScreen">
+  <div class="page">
+    <button class="back-btn" onclick="goHome()" style="margin-bottom:14px">← Topics</button>
+    <div id="wsLobby"></div>
+    <div id="wsGame" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="flex:1;height:10px;background:#EDE8F8;border-radius:99px;overflow:hidden"><div id="wsProgFill" style="height:100%;background:#9B59B6;border-radius:99px;transition:width .4s ease;width:0%"></div></div>
+        <div id="wsQCount" style="font-size:12px;font-weight:700;color:#aaa;white-space:nowrap">1/10</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+        <div style="font-size:14px;font-weight:800;color:#9B59B6">⭐ <span id="wsPoints">0</span> pts</div>
+        <div id="wsLives" style="font-size:18px">❤️❤️❤️</div>
+      </div>
+      <div id="wsCard" style="background:#fff;border-radius:18px;padding:22px 18px;text-align:center;border:3px solid #EDE8F8;box-shadow:0 4px 0 #EDE8F8;margin-bottom:14px;transition:border-color .15s,background .15s">
+        <span id="wsEmoji" style="font-size:44px;margin-bottom:8px;display:block">🐶</span>
+        <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Spell in Spanish:</div>
+        <div id="wsEnglish" style="font-size:19px;font-weight:900;color:#333;margin-bottom:12px">dog</div>
+        <div id="wsAnswerRow" style="display:flex;justify-content:center;gap:4px;margin-bottom:8px;flex-wrap:wrap;min-height:42px"></div>
+        <div id="wsHint" style="font-size:11px;color:#bbb;font-weight:600"></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:#aaa;text-align:center;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">Tap letters to build your answer</div>
+      <div id="wsBank" style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap;min-height:46px;margin-bottom:10px"></div>
+      <div style="display:flex;gap:8px;justify-content:center">
+        <button onclick="wsClear()" style="background:#fff;border:2.5px solid #EDE8F8;border-radius:10px;padding:8px 16px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:#9B59B6;cursor:pointer">Clear ✕</button>
+        <button onclick="wsSubmit()" id="wsSubmitBtn" style="background:#9B59B6;color:#fff;border:none;border-radius:10px;padding:8px 20px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #6c3483">Check ✓</button>
+      </div>
+      <div id="wsFeedback" style="border-radius:12px;padding:11px 14px;margin-top:10px;display:none;align-items:center;gap:9px;font-weight:700"></div>
+    </div>
+    <div id="wsResults" style="display:none;text-align:center;padding:16px 0"></div>
+  </div>
+</div>
+
+<!-- FLASHCARD -->
+<div class="screen" id="flashScreen">
+  <div class="page">
+    <button class="back-btn" onclick="goHome()" style="margin-bottom:14px">← Topics</button>
+    <div id="fcLobby"></div>
+    <div id="fcGame" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="flex:1;height:10px;background:#D5F0E0;border-radius:99px;overflow:hidden"><div id="fcProgFill" style="height:100%;background:#27AE60;border-radius:99px;transition:width .4s ease;width:0%"></div></div>
+        <div id="fcQCount" style="font-size:12px;font-weight:700;color:#aaa;white-space:nowrap">1/10</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+        <div style="font-size:14px;font-weight:800;color:#27AE60">⭐ <span id="fcPoints">0</span> pts</div>
+        <div style="font-size:12px;color:#aaa;font-weight:700">🔁 <span id="fcRemain">0</span> to review</div>
+      </div>
+      <div class="fc-card-wrap" onclick="flipCard()">
+        <div class="fc-card" id="fcCard">
+          <div class="fc-face fc-front">
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;border-radius:99px;padding:3px 10px;background:#D5F0E0;color:#1a7a42">English</span>
+            <div id="fcFrontEmoji" style="font-size:44px;margin-bottom:10px">🐶</div>
+            <div id="fcFrontWord" style="font-size:24px;font-weight:900;color:#333">dog</div>
+            <div style="font-size:11px;color:#aaa;margin-top:10px;font-weight:600">Tap to reveal Spanish →</div>
+          </div>
+          <div class="fc-face fc-back">
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;border-radius:99px;padding:3px 10px;background:rgba(255,255,255,.2);color:#fff">Spanish</span>
+            <div id="fcBackEmoji" style="font-size:44px;margin-bottom:10px">🐶</div>
+            <div id="fcBackWord" style="font-size:24px;font-weight:900;color:#fff">perro</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:10px;font-weight:600">Did you get it?</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:10px">
+        <button onclick="fcAnswer(true)" style="flex:1;background:#fff;border:2.5px solid #27AE60;color:#27AE60;border-radius:13px;padding:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer">✅ Got it!</button>
+        <button onclick="fcAnswer(false)" style="flex:1;background:#fff;border:2.5px solid #FF6B6B;color:#CC3333;border-radius:13px;padding:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer">🔁 Try again</button>
+      </div>
+      <button onclick="fcSkip()" style="width:100%;background:#fff;border:2px solid #eee;border-radius:11px;padding:8px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#aaa;cursor:pointer">Skip →</button>
+    </div>
+    <div id="fcResults" style="display:none;text-align:center;padding:16px 0"></div>
+  </div>
+</div>
+
+<!-- BUBBLE POP -->
+<div class="screen" id="bubbleScreen">
+  <div class="page">
+    <button class="back-btn" onclick="goHome()" style="margin-bottom:14px">← Topics</button>
+    <div id="bpLobby"></div>
+    <div id="bpGame" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px">
+        <div style="position:relative;width:60px;height:60px;flex-shrink:0">
+          <svg width="60" height="60" viewBox="0 0 60 60" style="transform:rotate(-90deg)"><circle fill="none" stroke="#D6EAF8" stroke-width="5" cx="30" cy="30" r="25"/><circle id="bpTimerRing" fill="none" stroke="#3498DB" stroke-width="5" cx="30" cy="30" r="25" stroke-dasharray="157" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear,stroke .3s"/></svg>
+          <div id="bpTimerNum" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#3498DB">60</div>
+        </div>
+        <div style="text-align:center"><div id="bpScore" style="font-size:30px;font-weight:900;color:#3498DB">0</div><div style="font-size:11px;color:#aaa;font-weight:700">points</div></div>
+        <div style="text-align:center"><div id="bpLives" style="font-size:17px;letter-spacing:2px">❤️❤️❤️</div><div style="font-size:11px;color:#aaa;font-weight:700">lives</div></div>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:16px;text-align:center;border:3px solid #D6EAF8;margin-bottom:12px;box-shadow:0 4px 0 #D6EAF8">
+        <div id="bpPrompt" style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">What does this mean?</div>
+        <div id="bpWord" style="font-size:22px;font-weight:900;color:#333">...</div>
+      </div>
+      <div class="bp-arena" id="bpArena"></div>
+    </div>
+    <div id="bpResults" style="display:none;text-align:center;padding:16px 0"></div>
+  </div>
+</div>
+
+<!-- LEARN QUIZ -->
+<div class="screen" id="quizScreen">
+  <div class="page">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <button class="back-btn" onclick="goHome()" style="flex-shrink:0">← Topics</button>
+      <div style="flex:1;height:11px;background:#EDE5FF;border-radius:99px;overflow:hidden"><div id="progressFill" style="height:100%;background:#00C9A7;border-radius:99px;transition:width .4s ease;width:0%"></div></div>
+      <div id="qCount" style="font-size:12px;font-weight:700;color:#aaa;white-space:nowrap;flex-shrink:0">1/8</div>
+    </div>
+    <div class="q-box" id="questionBox"></div>
+    <div id="answerArea"></div>
+    <div class="feedback" id="feedbackBar">
+      <span id="feedbackIcon" style="font-size:20px"></span>
+      <span id="feedbackMsg" style="flex:1;font-size:13px"></span>
+      <button onclick="nextQuestion()" style="background:#5B2FCC;color:#fff;border:none;border-radius:10px;padding:7px 14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ RESULTS -->
+<div class="screen" id="resultsScreen">
+  <div class="page" style="text-align:center;padding-top:30px">
+    <span id="resultsEmoji" style="font-size:66px;display:block;margin-bottom:12px;animation:bounce .6s ease">🎉</span>
+    <h2 id="resultsTitle" style="font-size:26px;font-weight:900;color:#5B2FCC"></h2>
+    <div id="scoreBig" style="font-size:48px;font-weight:900;color:#00C9A7;margin:10px 0"></div>
+    <p id="resultsMsg" style="color:#888;font-size:14px;line-height:1.6;margin-bottom:20px"></p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button onclick="retryTopic()" class="btn btn-purple">Try again 🔄</button>
+      <button onclick="goHome()" class="btn btn-outline">Choose topic 🏠</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- GRAMMAR -->
+<div class="screen" id="grammarScreen">
+  <div class="page">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <button class="back-btn" onclick="nav('home')" style="background:#F4F0FF;color:#5B2FCC">← Home</button>
+      <h2 style="font-size:20px;font-weight:900;color:#5B2FCC">📖 Grammar</h2>
+    </div>
+    <div id="grammarContent"></div>
+  </div>
+</div>
+
+<!-- ME -->
+<div class="screen" id="meScreen">
+  <div class="page">
+    <h2 style="font-size:22px;font-weight:900;color:#5B2FCC;margin-bottom:6px">🏅 Me</h2>
+    <p style="font-size:14px;color:#aaa;margin-bottom:18px">Your badges &amp; settings</p>
+    <!-- audio row -->
+    <div style="background:#fff;border-radius:14px;padding:16px;border:2px solid #EDE5FF;margin-bottom:20px;display:flex;align-items:center;gap:14px">
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:800;color:#333">Audio pronunciation</div>
+        <div style="font-size:12px;color:#aaa;margin-top:2px">Hear Spanish words read aloud</div>
+      </div>
+      <button id="audioToggleBtnMe" onclick="toggleAudio();updateAudioBtnMe()" style="background:#F4F0FF;border:1.5px solid #A78BFA;border-radius:20px;padding:6px 16px;cursor:pointer;font-size:15px;font-family:'Nunito',sans-serif;font-weight:800;color:#5B2FCC">🔊 On</button>
+    </div>
+    <div class="section-label">Badges</div>
+    <div id="badgesGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px"></div>
+  </div>
+</div>
+</div><!-- #root -->
+
+<div class="bottom-nav">
+  <button class="nav-item active" id="nav-home" onclick="nav('home')"><span class="nav-icon">🏠</span>Home</button>
+  <button class="nav-item" id="nav-review" onclick="nav('review')"><span class="nav-icon">🧠</span>Review</button>
+  <button class="nav-item" id="nav-watch" onclick="nav('watch')"><span class="nav-icon">📺</span>Watch</button>
+  <button class="nav-item" id="nav-progress" onclick="nav('progress')"><span class="nav-icon">📊</span>Progress</button>
+  <button class="nav-item" id="nav-me" onclick="nav('me')"><span class="nav-icon">🏅</span>Me</button>
+</div>
+
+<div class="countdown-overlay" id="countdownOverlay" style="display:none">
+  <div class="countdown-num" id="countdownNum">3</div>
+  <div id="countdownLbl">Get ready!</div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+/* ── topic schema: { id, name, icon, color, level ('ks2'|'ks3'), words[] } ──
+   level field future-proofs KS3 expansion — filter by level when needed    */
+const TOPICS=[
+  /* ── KS2 ORIGINAL 10 ── */
+  {id:'greetings',name:'Greetings',icon:'👋',color:'#FF6B35',level:'ks2',words:[
+    {es:'Hola',en:'Hello',emoji:'👋'},{es:'Adiós',en:'Goodbye',emoji:'🚪'},
+    {es:'Buenos días',en:'Good morning',emoji:'🌅'},{es:'Buenas tardes',en:'Good afternoon',emoji:'☀️'},
+    {es:'Por favor',en:'Please',emoji:'🙏'},{es:'Gracias',en:'Thank you',emoji:'💛'},
+    {es:'De nada',en:"You're welcome",emoji:'😊'},{es:'Muy bien',en:'Very well',emoji:'✅'},
+    {es:'Hasta luego',en:'See you later',emoji:'👋'},{es:'Hola a todos',en:'Hello everyone',emoji:'👐'}
+  ]},
+  {id:'numbers',name:'Numbers 1–10',icon:'🔢',color:'#4ECDC4',level:'ks2',words:[
+    {es:'uno',en:'one',emoji:'1️⃣'},{es:'dos',en:'two',emoji:'2️⃣'},{es:'tres',en:'three',emoji:'3️⃣'},
+    {es:'cuatro',en:'four',emoji:'4️⃣'},{es:'cinco',en:'five',emoji:'5️⃣'},{es:'seis',en:'six',emoji:'6️⃣'},
+    {es:'siete',en:'seven',emoji:'7️⃣'},{es:'ocho',en:'eight',emoji:'8️⃣'},{es:'nueve',en:'nine',emoji:'9️⃣'},
+    {es:'diez',en:'ten',emoji:'🔟'}
+  ]},
+  {id:'animals',name:'Animals',icon:'🐾',color:'#9B59B6',level:'ks2',words:[
+    {es:'perro',en:'dog',emoji:'🐶'},{es:'gato',en:'cat',emoji:'🐱'},{es:'pájaro',en:'bird',emoji:'🐦'},
+    {es:'pez',en:'fish',emoji:'🐟'},{es:'caballo',en:'horse',emoji:'🐴'},{es:'vaca',en:'cow',emoji:'🐄'},
+    {es:'conejo',en:'rabbit',emoji:'🐰'},{es:'ratón',en:'mouse',emoji:'🐭'},
+    {es:'elefante',en:'elephant',emoji:'🐘'},{es:'león',en:'lion',emoji:'🦁'}
+  ]},
+  {id:'colours',name:'Colours',icon:'🎨',color:'#E74C3C',level:'ks2',words:[
+    {es:'rojo',en:'red',emoji:'🔴'},{es:'azul',en:'blue',emoji:'🔵'},{es:'verde',en:'green',emoji:'🟢'},
+    {es:'amarillo',en:'yellow',emoji:'🟡'},{es:'naranja',en:'orange',emoji:'🟠'},{es:'morado',en:'purple',emoji:'🟣'},
+    {es:'negro',en:'black',emoji:'⚫'},{es:'blanco',en:'white',emoji:'⚪'},{es:'rosa',en:'pink',emoji:'🩷'},
+    {es:'marrón',en:'brown',emoji:'🟤'}
+  ]},
+  {id:'food',name:'Food & drink',icon:'🍽️',color:'#F39C12',level:'ks2',words:[
+    {es:'agua',en:'water',emoji:'💧'},{es:'leche',en:'milk',emoji:'🥛'},{es:'pan',en:'bread',emoji:'🍞'},
+    {es:'manzana',en:'apple',emoji:'🍎'},{es:'plátano',en:'banana',emoji:'🍌'},{es:'naranja',en:'orange',emoji:'🍊'},
+    {es:'queso',en:'cheese',emoji:'🧀'},{es:'pizza',en:'pizza',emoji:'🍕'},
+    {es:'helado',en:'ice cream',emoji:'🍦'},{es:'zumo',en:'juice',emoji:'🧃'}
+  ]},
+  {id:'family',name:'Family',icon:'👨‍👩‍👧‍👦',color:'#27AE60',level:'ks2',words:[
+    {es:'madre',en:'mother',emoji:'👩'},{es:'padre',en:'father',emoji:'👨'},
+    {es:'hermana',en:'sister',emoji:'👧'},{es:'hermano',en:'brother',emoji:'👦'},
+    {es:'abuela',en:'grandmother',emoji:'👵'},{es:'abuelo',en:'grandfather',emoji:'👴'},
+    {es:'tía',en:'aunt',emoji:'🙍'},{es:'tío',en:'uncle',emoji:'🙍‍♂️'},
+    {es:'bebé',en:'baby',emoji:'👶'},{es:'familia',en:'family',emoji:'👨‍👩‍👧‍👦'}
+  ]},
+  {id:'classroom',name:'Classroom',icon:'🏫',color:'#3498DB',level:'ks2',words:[
+    {es:'libro',en:'book',emoji:'📖'},{es:'lápiz',en:'pencil',emoji:'✏️'},
+    {es:'mesa',en:'table',emoji:'🪑'},{es:'silla',en:'chair',emoji:'💺'},
+    {es:'mochila',en:'backpack',emoji:'🎒'},{es:'bolígrafo',en:'pen',emoji:'🖊️'},
+    {es:'regla',en:'ruler',emoji:'📏'},{es:'tijeras',en:'scissors',emoji:'✂️'},
+    {es:'papel',en:'paper',emoji:'📄'},{es:'pizarra',en:'board',emoji:'🖥️'}
+  ]},
+  {id:'body',name:'Body parts',icon:'🧍',color:'#E91E8C',level:'ks2',words:[
+    {es:'cabeza',en:'head',emoji:'👤'},{es:'ojos',en:'eyes',emoji:'👀'},
+    {es:'nariz',en:'nose',emoji:'👃'},{es:'boca',en:'mouth',emoji:'👄'},
+    {es:'orejas',en:'ears',emoji:'👂'},{es:'brazos',en:'arms',emoji:'💪'},
+    {es:'manos',en:'hands',emoji:'🤲'},{es:'piernas',en:'legs',emoji:'🦵'},
+    {es:'pies',en:'feet',emoji:'🦶'},{es:'pelo',en:'hair',emoji:'💇'}
+  ]},
+  {id:'weather',name:'Weather',icon:'🌤️',color:'#00BCD4',level:'ks2',words:[
+    {es:'sol',en:'sun',emoji:'☀️'},{es:'lluvia',en:'rain',emoji:'🌧️'},
+    {es:'nieve',en:'snow',emoji:'❄️'},{es:'viento',en:'wind',emoji:'💨'},
+    {es:'nubes',en:'clouds',emoji:'☁️'},{es:'arcoíris',en:'rainbow',emoji:'🌈'},
+    {es:'trueno',en:'thunder',emoji:'⛈️'},{es:'calor',en:'heat',emoji:'🌡️'},
+    {es:'frío',en:'cold',emoji:'🥶'},{es:'tormenta',en:'storm',emoji:'🌪️'}
+  ]},
+  {id:'days',name:'Days & months',icon:'📅',color:'#795548',level:'ks2',words:[
+    {es:'lunes',en:'Monday',emoji:'📅'},{es:'martes',en:'Tuesday',emoji:'📅'},
+    {es:'miércoles',en:'Wednesday',emoji:'📅'},{es:'jueves',en:'Thursday',emoji:'📅'},
+    {es:'viernes',en:'Friday',emoji:'🎉'},{es:'sábado',en:'Saturday',emoji:'😎'},
+    {es:'domingo',en:'Sunday',emoji:'☀️'},{es:'enero',en:'January',emoji:'❄️'},
+    {es:'febrero',en:'February',emoji:'💕'},{es:'marzo',en:'March',emoji:'🌱'}
+  ]},
+  /* ── KS2 NEW: EVERYDAY WORLD ── */
+  {id:'clothes',name:'Clothes',icon:'👕',color:'#8E44AD',level:'ks2',words:[
+    {es:'camisa',en:'shirt',emoji:'👔'},{es:'pantalones',en:'trousers',emoji:'👖'},
+    {es:'zapatos',en:'shoes',emoji:'👟'},{es:'calcetines',en:'socks',emoji:'🧦'},
+    {es:'abrigo',en:'coat',emoji:'🧥'},{es:'vestido',en:'dress',emoji:'👗'},
+    {es:'falda',en:'skirt',emoji:'🩱'},{es:'gorra',en:'cap',emoji:'🧢'},
+    {es:'bufanda',en:'scarf',emoji:'🧣'},{es:'guantes',en:'gloves',emoji:'🧤'}
+  ]},
+  {id:'house',name:'House & home',icon:'🏠',color:'#C0392B',level:'ks2',words:[
+    {es:'cocina',en:'kitchen',emoji:'🍳'},{es:'dormitorio',en:'bedroom',emoji:'🛏️'},
+    {es:'baño',en:'bathroom',emoji:'🚿'},{es:'salón',en:'living room',emoji:'🛋️'},
+    {es:'jardín',en:'garden',emoji:'🌱'},{es:'puerta',en:'door',emoji:'🚪'},
+    {es:'ventana',en:'window',emoji:'🪟'},{es:'escalera',en:'stairs',emoji:'🪜'},
+    {es:'mesa',en:'table',emoji:'🍽️'},{es:'cama',en:'bed',emoji:'🛏️'}
+  ]},
+  {id:'town',name:'Town & places',icon:'🏙️',color:'#2980B9',level:'ks2',words:[
+    {es:'tienda',en:'shop',emoji:'🏪'},{es:'colegio',en:'school',emoji:'🏫'},
+    {es:'hospital',en:'hospital',emoji:'🏥'},{es:'parque',en:'park',emoji:'🌳'},
+    {es:'biblioteca',en:'library',emoji:'📚'},{es:'mercado',en:'market',emoji:'🛒'},
+    {es:'iglesia',en:'church',emoji:'⛪'},{es:'playa',en:'beach',emoji:'🏖️'},
+    {es:'montaña',en:'mountain',emoji:'⛰️'},{es:'ciudad',en:'city',emoji:'🌆'}
+  ]},
+  {id:'transport',name:'Transport',icon:'🚗',color:'#16A085',level:'ks2',words:[
+    {es:'coche',en:'car',emoji:'🚗'},{es:'autobús',en:'bus',emoji:'🚌'},
+    {es:'tren',en:'train',emoji:'🚂'},{es:'avión',en:'aeroplane',emoji:'✈️'},
+    {es:'bicicleta',en:'bicycle',emoji:'🚲'},{es:'barco',en:'boat',emoji:'⛵'},
+    {es:'moto',en:'motorbike',emoji:'🏍️'},{es:'taxi',en:'taxi',emoji:'🚕'},
+    {es:'metro',en:'underground',emoji:'🚇'},{es:'camión',en:'lorry',emoji:'🚛'}
+  ]},
+  {id:'shopping',name:'Shopping',icon:'🛍️',color:'#D35400',level:'ks2',words:[
+    {es:'dinero',en:'money',emoji:'💰'},{es:'precio',en:'price',emoji:'🏷️'},
+    {es:'caro',en:'expensive',emoji:'💸'},{es:'barato',en:'cheap',emoji:'🪙'},
+    {es:'comprar',en:'to buy',emoji:'🛒'},{es:'vender',en:'to sell',emoji:'💼'},
+    {es:'grande',en:'big',emoji:'🔺'},{es:'pequeño',en:'small',emoji:'🔻'},
+    {es:'color',en:'colour',emoji:'🎨'},{es:'talla',en:'size',emoji:'📏'}
+  ]},
+  {id:'technology',name:'Technology',icon:'💻',color:'#1ABC9C',level:'ks2',words:[
+    {es:'ordenador',en:'computer',emoji:'💻'},{es:'teléfono',en:'phone',emoji:'📱'},
+    {es:'internet',en:'internet',emoji:'🌐'},{es:'juego',en:'game',emoji:'🎮'},
+    {es:'música',en:'music',emoji:'🎵'},{es:'foto',en:'photo',emoji:'📷'},
+    {es:'vídeo',en:'video',emoji:'📹'},{es:'pantalla',en:'screen',emoji:'🖥️'},
+    {es:'ratón',en:'mouse',emoji:'🖱️'},{es:'teclado',en:'keyboard',emoji:'⌨️'}
+  ]},
+  {id:'nature',name:'Nature',icon:'🌿',color:'#27AE60',level:'ks2',words:[
+    {es:'árbol',en:'tree',emoji:'🌳'},{es:'flor',en:'flower',emoji:'🌸'},
+    {es:'río',en:'river',emoji:'🏞️'},{es:'mar',en:'sea',emoji:'🌊'},
+    {es:'tierra',en:'earth',emoji:'🌍'},{es:'sol',en:'sun',emoji:'☀️'},
+    {es:'luna',en:'moon',emoji:'🌙'},{es:'estrella',en:'star',emoji:'⭐'},
+    {es:'hierba',en:'grass',emoji:'🌿'},{es:'piedra',en:'stone',emoji:'🪨'}
+  ]},
+  /* ── KS2 NEW: ME & MY LIFE ── */
+  {id:'feelings',name:'Feelings',icon:'😀',color:'#F39C12',level:'ks2',words:[
+    {es:'feliz',en:'happy',emoji:'😊'},{es:'triste',en:'sad',emoji:'😢'},
+    {es:'enfadado',en:'angry',emoji:'😠'},{es:'asustado',en:'scared',emoji:'😨'},
+    {es:'cansado',en:'tired',emoji:'😴'},{es:'aburrido',en:'bored',emoji:'😑'},
+    {es:'emocionado',en:'excited',emoji:'🤩'},{es:'nervioso',en:'nervous',emoji:'😬'},
+    {es:'contento',en:'pleased',emoji:'😁'},{es:'sorprendido',en:'surprised',emoji:'😲'}
+  ]},
+  {id:'sports',name:'Sports & hobbies',icon:'⚽',color:'#2ECC71',level:'ks2',words:[
+    {es:'fútbol',en:'football',emoji:'⚽'},{es:'natación',en:'swimming',emoji:'🏊'},
+    {es:'ciclismo',en:'cycling',emoji:'🚴'},{es:'tenis',en:'tennis',emoji:'🎾'},
+    {es:'bailar',en:'dancing',emoji:'💃'},{es:'dibujar',en:'drawing',emoji:'✏️'},
+    {es:'leer',en:'reading',emoji:'📖'},{es:'cocinar',en:'cooking',emoji:'🍳'},
+    {es:'cantar',en:'singing',emoji:'🎤'},{es:'jugar',en:'playing',emoji:'🎲'}
+  ]},
+  {id:'music',name:'Music & arts',icon:'🎵',color:'#9B59B6',level:'ks2',words:[
+    {es:'guitarra',en:'guitar',emoji:'🎸'},{es:'piano',en:'piano',emoji:'🎹'},
+    {es:'tambor',en:'drum',emoji:'🥁'},{es:'flauta',en:'flute',emoji:'🪈'},
+    {es:'canción',en:'song',emoji:'🎵'},{es:'pintura',en:'painting',emoji:'🎨'},
+    {es:'dibujo',en:'drawing',emoji:'✏️'},{es:'teatro',en:'theatre',emoji:'🎭'},
+    {es:'danza',en:'dance',emoji:'💃'},{es:'escultura',en:'sculpture',emoji:'🗿'}
+  ]},
+  {id:'health',name:'Health & body',icon:'🍎',color:'#E74C3C',level:'ks2',words:[
+    {es:'enfermo',en:'ill',emoji:'🤒'},{es:'sano',en:'healthy',emoji:'💪'},
+    {es:'medicina',en:'medicine',emoji:'💊'},{es:'médico',en:'doctor',emoji:'👨‍⚕️'},
+    {es:'dolor',en:'pain',emoji:'🤕'},{es:'fiebre',en:'fever',emoji:'🌡️'},
+    {es:'descanso',en:'rest',emoji:'😴'},{es:'ejercicio',en:'exercise',emoji:'🏃'},
+    {es:'fruta',en:'fruit',emoji:'🍎'},{es:'verdura',en:'vegetable',emoji:'🥦'}
+  ]},
+  {id:'subjects',name:'School subjects',icon:'🎒',color:'#3498DB',level:'ks2',words:[
+    {es:'matemáticas',en:'maths',emoji:'➕'},{es:'inglés',en:'English',emoji:'🇬🇧'},
+    {es:'español',en:'Spanish',emoji:'🇪🇸'},{es:'ciencias',en:'science',emoji:'🔬'},
+    {es:'historia',en:'history',emoji:'📜'},{es:'geografía',en:'geography',emoji:'🌍'},
+    {es:'arte',en:'art',emoji:'🎨'},{es:'música',en:'music',emoji:'🎵'},
+    {es:'educación física',en:'PE',emoji:'🏃'},{es:'tecnología',en:'technology',emoji:'💻'}
+  ]},
+  {id:'celebrations',name:'Celebrations',icon:'🎉',color:'#E91E63',level:'ks2',words:[
+    {es:'cumpleaños',en:'birthday',emoji:'🎂'},{es:'Navidad',en:'Christmas',emoji:'🎄'},
+    {es:'fiesta',en:'party',emoji:'🎉'},{es:'regalo',en:'present',emoji:'🎁'},
+    {es:'globo',en:'balloon',emoji:'🎈'},{es:'pastel',en:'cake',emoji:'🎂'},
+    {es:'vela',en:'candle',emoji:'🕯️'},{es:'música',en:'music',emoji:'🎵'},
+    {es:'baile',en:'dance',emoji:'💃'},{es:'felicitaciones',en:'congratulations',emoji:'🏆'}
+  ]},
+  /* ── KS2 NEW: LANGUAGE BUILDING BLOCKS ── */
+  {id:'numbers2',name:'Numbers 11–100',icon:'🔢',color:'#00897B',level:'ks2',words:[
+    {es:'once',en:'eleven',emoji:'1️⃣1️⃣'},{es:'doce',en:'twelve',emoji:'1️⃣2️⃣'},
+    {es:'trece',en:'thirteen',emoji:'1️⃣3️⃣'},{es:'veinte',en:'twenty',emoji:'2️⃣0️⃣'},
+    {es:'veintiuno',en:'twenty-one',emoji:'2️⃣1️⃣'},{es:'treinta',en:'thirty',emoji:'3️⃣0️⃣'},
+    {es:'cuarenta',en:'forty',emoji:'4️⃣0️⃣'},{es:'cincuenta',en:'fifty',emoji:'5️⃣0️⃣'},
+    {es:'cien',en:'one hundred',emoji:'💯'},{es:'mil',en:'one thousand',emoji:'🔢'}
+  ]},
+  {id:'time',name:'Time & routines',icon:'⏰',color:'#546E7A',level:'ks2',words:[
+    {es:'mañana',en:'morning',emoji:'🌅'},{es:'tarde',en:'afternoon',emoji:'🌤️'},
+    {es:'noche',en:'night',emoji:'🌙'},{es:'hoy',en:'today',emoji:'📅'},
+    {es:'ayer',en:'yesterday',emoji:'⬅️'},{es:'mañana',en:'tomorrow',emoji:'➡️'},
+    {es:'ahora',en:'now',emoji:'⏱️'},{es:'siempre',en:'always',emoji:'♾️'},
+    {es:'nunca',en:'never',emoji:'🚫'},{es:'a veces',en:'sometimes',emoji:'↔️'}
+  ]},
+  {id:'directions',name:'Directions',icon:'📍',color:'#FF7043',level:'ks2',words:[
+    {es:'izquierda',en:'left',emoji:'⬅️'},{es:'derecha',en:'right',emoji:'➡️'},
+    {es:'arriba',en:'up',emoji:'⬆️'},{es:'abajo',en:'down',emoji:'⬇️'},
+    {es:'todo recto',en:'straight on',emoji:'⬆️'},{es:'cerca',en:'near',emoji:'📍'},
+    {es:'lejos',en:'far',emoji:'🗺️'},{es:'aquí',en:'here',emoji:'👇'},
+    {es:'allí',en:'there',emoji:'👉'},{es:'gira',en:'turn',emoji:'🔄'}
+  ]},
+  {id:'adjectives',name:'Adjectives',icon:'✨',color:'#7B1FA2',level:'ks2',words:[
+    {es:'grande',en:'big',emoji:'🔺'},{es:'pequeño',en:'small',emoji:'🔻'},
+    {es:'rápido',en:'fast',emoji:'💨'},{es:'lento',en:'slow',emoji:'🐢'},
+    {es:'bonito',en:'beautiful',emoji:'🌸'},{es:'feo',en:'ugly',emoji:'🤢'},
+    {es:'nuevo',en:'new',emoji:'✨'},{es:'viejo',en:'old',emoji:'🏚️'},
+    {es:'fácil',en:'easy',emoji:'😌'},{es:'difícil',en:'difficult',emoji:'🤔'}
+  ]},
+  {id:'verbs',name:'Action verbs',icon:'🏃',color:'#D84315',level:'ks2',words:[
+    {es:'correr',en:'to run',emoji:'🏃'},{es:'saltar',en:'to jump',emoji:'🦘'},
+    {es:'comer',en:'to eat',emoji:'🍽️'},{es:'beber',en:'to drink',emoji:'🥤'},
+    {es:'dormir',en:'to sleep',emoji:'😴'},{es:'hablar',en:'to speak',emoji:'💬'},
+    {es:'escribir',en:'to write',emoji:'✏️'},{es:'leer',en:'to read',emoji:'📖'},
+    {es:'escuchar',en:'to listen',emoji:'👂'},{es:'mirar',en:'to look',emoji:'👀'}
+  ]},
+  {id:'questions',name:'Question words',icon:'❓',color:'#0288D1',level:'ks2',words:[
+    {es:'qué',en:'what',emoji:'❓'},{es:'quién',en:'who',emoji:'👤'},
+    {es:'dónde',en:'where',emoji:'📍'},{es:'cuándo',en:'when',emoji:'📅'},
+    {es:'por qué',en:'why',emoji:'🤔'},{es:'cómo',en:'how',emoji:'💭'},
+    {es:'cuánto',en:'how much',emoji:'💰'},{es:'cuántos',en:'how many',emoji:'🔢'},
+    {es:'cuál',en:'which',emoji:'☝️'},{es:'verdad',en:'right / true',emoji:'✅'}
+  ]},
+  {id:'connectives',name:'Connectives',icon:'🔗',color:'#6D4C41',level:'ks2',words:[
+    {es:'y',en:'and',emoji:'➕'},{es:'pero',en:'but',emoji:'↔️'},
+    {es:'porque',en:'because',emoji:'💡'},{es:'también',en:'also',emoji:'✅'},
+    {es:'sin embargo',en:'however',emoji:'🔄'},{es:'primero',en:'first',emoji:'1️⃣'},
+    {es:'después',en:'after',emoji:'➡️'},{es:'finalmente',en:'finally',emoji:'🏁'},
+    {es:'o',en:'or',emoji:'🔀'},{es:'si',en:'if',emoji:'🤔'}
+  ]}
+];
+
+const VIDEOS={
+  greetings:[{id:'-hceggEiwr4',title:'Greetings with Cirilo',channel:'El Recreo Spanish',desc:'Hola, Adiós, Buenos días and more.',tags:['song','vocab']},{id:'oUvyhStbFy8',title:'Greetings Song',channel:'Rockalingua',desc:'Catchy song covering everyday Spanish greetings.',tags:['song']}],
+  numbers:[{id:'oUvyhStbFy8',title:'Los Números',channel:'Rockalingua',desc:'Catchy song for numbers 1-10.',tags:['song','vocab']},{id:'ZiNFXntWOJw',title:'Colours and Numbers',channel:'Rockalingua',desc:'Two topics in one song.',tags:['song']}],
+  animals:[{id:'mqTKdztf40M',title:'Los Animales',channel:'Spanish Songs for Kids',desc:'Fun animal song for KS2.',tags:['song','vocab']},{id:'ldF4o3jc07A',title:'Animals Song',channel:'Sing with Señor',desc:'High-energy animal vocabulary song.',tags:['song']}],
+  colours:[{id:'gBeYkZiaSB8',title:'Los Colores',channel:'ChuChu TV Español',desc:'Learn all the main colours in Spanish.',tags:['song','vocab']},{id:'xDa22ECW7GY',title:'Colors in Spanish',channel:'Spanish for Little Learners',desc:'Native speaker teaches colours.',tags:['vocab']}],
+  food:[{id:'NRb54NXWq7k',title:'La Comida Song',channel:'Vivamos Spanish',desc:'Key food vocabulary song.',tags:['song','vocab']},{id:'ALBBusQEXNA',title:'Te Gusta?',channel:'Super Simple Español',desc:'Food likes and dislikes.',tags:['song','structure']}],
+  family:[{id:'_T1svGpYS28',title:'La Familia',channel:'Rockalingua',desc:'Family members song.',tags:['song','vocab']},{id:'AgCmDQFuFE8',title:'Family Members',channel:'Educational Videos for Kids',desc:'Clear family vocabulary video.',tags:['vocab']}],
+  classroom:[{id:'W-2SjVT28ak',title:'Materiales Escolares',channel:'The Language Project',desc:'Classroom objects song.',tags:['song','vocab']},{id:'jww7Jz79dWM',title:'Classroom Objects',channel:'Beginner Spanish Lessons',desc:'Simple classroom vocabulary.',tags:['vocab']}],
+  body:[{id:'pOg6y-Q59eM',title:'Las Partes del Cuerpo',channel:'Rockalingua',desc:'Classic body parts song.',tags:['song','vocab']},{id:'yjIc4jOMjRw',title:'Body Parts with Lyrics',channel:'Lingopie Music',desc:'Sing-along with lyrics.',tags:['song']}],
+  weather:[{id:'K91FAXSL8GY',title:'El Tiempo',channel:'Spanish Songs for Kids',desc:'Weather vocabulary song.',tags:['song','vocab']},{id:'eRG-2-NJruw',title:'Spanish Weather',channel:'GaMar Talk',desc:'How to say the weather.',tags:['vocab','structure']}],
+  days:[{id:'y1JXoP393-o',title:'Days and Months',channel:'Basho and Friends',desc:'All 7 days and 12 months in one song.',tags:['song','vocab']},{id:'9j1ueJ_XdFM',title:'Days of the Week',channel:'Spanish Songs for Kids',desc:'Simple days of the week song.',tags:['song']}]
+};
+
+const SB_SENTENCES={
+  1:[
+    {en:'The dog is big',es:['El','perro','es','grande'],distractors:['gato','pequeño','la','un']},
+    {en:'I like apples',es:['Me','gustan','las','manzanas'],distractors:['no','gusta','perros','el']},
+    {en:'The cat is small',es:['El','gato','es','pequeño'],distractors:['grande','perro','la','un']},
+    {en:'I have a book',es:['Tengo','un','libro'],distractors:['tienes','una','mesa','el']},
+    {en:'The sun is yellow',es:['El','sol','es','amarillo'],distractors:['luna','rojo','la','un']},
+    {en:'I am happy',es:['Estoy','contento'],distractors:['triste','eres','soy','muy']},
+    {en:'The water is cold',es:['El','agua','está','fría'],distractors:['caliente','la','es','un']},
+    {en:'I have a dog',es:['Tengo','un','perro'],distractors:['gato','una','tienes','el']}
+  ],
+  2:[
+    {en:'My mother is tall',es:['Mi','madre','es','alta'],distractors:['padre','baja','la','tu']},
+    {en:'I like playing football',es:['Me','gusta','jugar','al','fútbol'],distractors:['no','gustan','la','tenis']},
+    {en:'My dog is very big',es:['Mi','perro','es','muy','grande'],distractors:['gato','pequeño','la','tu']},
+    {en:'I can speak Spanish',es:['Puedo','hablar','español'],distractors:['inglés','hablas','puedes','bien']},
+    {en:'Today it is raining',es:['Hoy','está','lloviendo'],distractors:['mañana','hace','sol','nieva']},
+    {en:'I have two brothers',es:['Tengo','dos','hermanos'],distractors:['tres','hermanas','tienes','un']},
+    {en:'The food is very good',es:['La','comida','está','muy','buena'],distractors:['mala','el','agua','rica']},
+    {en:'I live in England',es:['Vivo','en','Inglaterra'],distractors:['España','vives','trabajo','Francia']}
+  ],
+  3:[
+    {en:'I would like a glass of water',es:['Quisiera','un','vaso','de','agua'],distractors:['quiero','una','copa','leche']},
+    {en:'My favourite colour is blue',es:['Mi','color','favorito','es','el','azul'],distractors:['rojo','verde','tu','la']},
+    {en:'At the weekend I play football',es:['El','fin','de','semana','juego','al','fútbol'],distractors:['tenis','lunes','juega','un']},
+    {en:'I think Spanish is fun',es:['Creo','que','el','español','es','divertido'],distractors:['aburrido','pienso','inglés','muy']},
+    {en:'My family lives in a house',es:['Mi','familia','vive','en','una','casa'],distractors:['piso','tu','viven','el']},
+    {en:'I want to visit Spain one day',es:['Quiero','visitar','España','algún','día'],distractors:['Italia','quiero','un','Francia']},
+    {en:'In Spain people eat late',es:['En','España','la','gente','come','tarde'],distractors:['temprano','Italia','el','una']},
+    {en:'I have been learning Spanish for two years',es:['Llevo','dos','años','aprendiendo','español'],distractors:['tres','meses','inglés','seis']}
+  ]
+};
+
+const CULTURE_FACTS=[
+  {country:'Spain',flag:'🇪🇸',category:'Language',fact:'Spanish is spoken by over 500 million people worldwide — the second most spoken language by native speakers!'},
+  {country:'Mexico',flag:'🇲🇽',category:'Food',fact:'Mexico gave the world chocolate, tomatoes, corn and chillies. The word "chocolate" comes from the Aztec word "xocolatl".'},
+  {country:'Spain',flag:'🇪🇸',category:'Festival',fact:'La Tomatina in Buñol, Spain sees thousands of people throw over 150,000 tomatoes at each other in one hour!'},
+  {country:'Argentina',flag:'🇦🇷',category:'Sport',fact:'Argentina has won the FIFA World Cup 3 times. Lionel Messi, widely considered the greatest footballer ever, is Argentine.'},
+  {country:'Colombia',flag:'🇨🇴',category:'Nature',fact:'Colombia is home to over 1,900 species of birds — more than any other country on Earth!'},
+  {country:'Spain',flag:'🇪🇸',category:'History',fact:'Spanish developed from Latin brought by Romans over 2,000 years ago. It spread worldwide during the Age of Exploration.'},
+  {country:'Peru',flag:'🇵🇪',category:'History',fact:'Machu Picchu was built by the Inca Empire around 1450 AD. It sits 2,430 metres above sea level — one of the New Seven Wonders of the World!'},
+  {country:'Mexico',flag:'🇲🇽',category:'Festival',fact:'Día de los Muertos is a Mexican holiday where families remember loved ones who have passed — celebrated on 1–2 November each year.'},
+  {country:'Spain',flag:'🇪🇸',category:'Food',fact:'Paella is a famous rice dish from Valencia, Spain — cooked with saffron, vegetables, seafood or meat in a wide flat pan.'},
+  {country:'Cuba',flag:'🇨🇺',category:'Music',fact:'Cuba gave the world salsa music! The rhythm blends African percussion with Spanish guitar and is danced all over the world.'},
+  {country:'Brazil',flag:'🇧🇷',category:'Language',fact:'Brazil is the only South American country where Portuguese, not Spanish, is the official language.'},
+  {country:'Spain',flag:'🇪🇸',category:'Sport',fact:'FC Barcelona and Real Madrid are two of the most famous football clubs in the world — both based in Spain!'}
+];
+
+const CULTURE_QUIZ=[
+  {q:'How many people speak Spanish worldwide?',opts:['100 million','250 million','500 million','1 billion'],correct:2},
+  {q:'Which country has the most Spanish speakers?',opts:['Spain','Colombia','Mexico','Argentina'],correct:2},
+  {q:'What food did Mexico give to the world?',opts:['Pizza','Chocolate','Sushi','Curry'],correct:1},
+  {q:'What is La Tomatina?',opts:['A dance','A tomato-throwing festival','A type of food','A football team'],correct:1},
+  {q:'How many times has Argentina won the World Cup?',opts:['1','2','3','4'],correct:2},
+  {q:'Where is Machu Picchu?',opts:['Mexico','Colombia','Spain','Peru'],correct:3},
+  {q:'What language do people speak in Brazil?',opts:['Spanish','French','Portuguese','Italian'],correct:2},
+  {q:'What is Día de los Muertos?',opts:['A harvest festival','A day to remember loved ones','A food festival','New Year'],correct:1},
+  {q:'What is paella cooked in?',opts:['A pot','A bowl','A wide flat pan','A clay dish'],correct:2},
+  {q:'Which country gave the world salsa music?',opts:['Spain','Mexico','Argentina','Cuba'],correct:3}
+];
+
+const ALL_BADGES=[
+  {id:'first_word',icon:'⭐',name:'First Steps',desc:'Complete your first quiz',check:()=>Object.values(progress).some(v=>v>0)},
+  {id:'speed_demon',icon:'⚡',name:'Speed Demon',desc:'Score 100+ in Speed Round',check:()=>Object.values(speedBests).some(v=>v>=100)},
+  {id:'perfect',icon:'🏆',name:'Perfecto!',desc:'Score 8/8 in Learn mode',check:()=>Object.values(progress).some(v=>v>=8)},
+  {id:'streak_3',icon:'🔥',name:'On Fire',desc:'Get a 3-day streak',check:()=>streak>=3},
+  {id:'vocab_half',icon:'📚',name:'Word Collector',desc:'Complete 5 vocab topics',check:()=>Object.values(progress).filter(v=>v>=7).length>=5},
+  {id:'vocab_all',icon:'🎓',name:'Vocab Master',desc:'Complete all 30 topics',check:()=>Object.values(progress).filter(v=>v>=7).length>=TOPICS.length},
+  {id:'scramble_ace',icon:'🧩',name:'Puzzle Pro',desc:'Score 150+ in Scramble',check:()=>Object.values(scrambleBests).some(v=>v>=150)},
+  {id:'sentence_1',icon:'🧱',name:'Sentence Starter',desc:'Complete 3 Level 1 sentences correctly',check:()=>(sbProgress[1]||0)>=3},
+  {id:'sentence_all',icon:'💬',name:'Sentence Builder',desc:'Complete all 3 sentence levels',check:()=>(sbProgress[1]||0)>=3&&(sbProgress[2]||0)>=3&&(sbProgress[3]||0)>=3},
+  {id:'culture_5',icon:'🌍',name:'World Explorer',desc:'Answer 5 culture quiz questions correctly',check:()=>cultureScore>=5},
+  {id:'xp_500',icon:'💎',name:'XP Champion',desc:'Earn 500 XP total',check:()=>xp>=500},
+  {id:'srs_10',icon:'🧠',name:'Brain Trainer',desc:'Master 10 words in Smart Review',check:()=>srsGetMasteredCount()>=10},
+  {id:'srs_all',icon:'🌟',name:'Memory Master',desc:'Master every word across all topics',check:()=>srsGetMasteredCount()>=TOPICS.reduce((a,t)=>a+t.words.length,0)}
+];
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let xp=parseInt(localStorage.getItem('lp_xp')||'0');
+let streak=parseInt(localStorage.getItem('lp_streak')||'0');
+let progress=JSON.parse(localStorage.getItem('lp_progress')||'{}');
+let speedBests=JSON.parse(localStorage.getItem('lp_speedbests')||'{}');
+let scrambleBests=JSON.parse(localStorage.getItem('lp_scramblebests')||'{}');
+let flashBests=JSON.parse(localStorage.getItem('lp_flashbests')||'{}');
+let bubbleBests=JSON.parse(localStorage.getItem('lp_bubblebests')||'{}');
+let earnedBadges=JSON.parse(localStorage.getItem('lp_badges')||'[]');
+let sbProgress=JSON.parse(localStorage.getItem('lp_sbprogress')||'{"1":0,"2":0,"3":0}');
+let cultureScore=parseInt(localStorage.getItem('lp_culturescore')||'0');
+let lastDailyDate=localStorage.getItem('lp_dailydate')||'';
+let currentTopic=null,currentMode='learn';
+let questions=[],qIndex=0,score=0,answered=false;
+let matchSelected={left:null,right:null},matchPairs=[],matchDone=0;
+let speedTimer=null,speedTimeLeft=60,speedPoints=0,speedCombo=1,speedTopCombo=1,speedCorrectCount=0,speedWordPool=[],speedWIdx=0;
+let wsWords=[],wsIdx=0,wsPoints=0,wsLives=3,wsCorrect=0,wsAnswerLetters=[],wsBankLetters=[],wsAnswered=false;
+let fcDeck=[],fcIdx=0,fcPoints=0,fcGot=0,fcRounds=0,fcFlipped=false,fcTrickyQueue=[];
+let bpTimer=null,bpTimeLeft=60,bpPoints=0,bpLivesLeft=3,bpCorrect=0,bpWordPool=[],bpWIdx=0,bpBubbles=[],bpAnswered=false,bpCorrectAnswer='';
+let currentVideoTopic=null,currentVideoIdx=0;
+let currentSbLevel=1,sbIdx=0,sbScore=0,sbPlaced=[],sbSentences=[],sbAnswered=false;
+let cultureTab='facts',cultureQIdx=0,cultureQScore=0,cultureQAnswered=false;
+
+/* ═══════════════════════════════════════════
+   SPACED REPETITION ENGINE
+   Each word gets a record: { interval, easeFactor, dueDate, streak, totalReviews }
+   interval: days until next review
+   easeFactor: 1.3–2.5, starts at 2.0 (kid-friendly gentler start vs SM-2's 2.5)
+   dueDate: ISO date string
+   streak: consecutive correct answers
+═══════════════════════════════════════════ */
+let srsData=JSON.parse(localStorage.getItem('lp_srs')||'{}');
+// srsData['topicId:wordEs'] = { interval, easeFactor, dueDate, streak, totalReviews }
+
+const SRS_INTERVALS=[0,1,3,7,14,30]; // days for each level
+const SRS_MIN_EF=1.3;
+
+function srsKey(topicId,wordEs){return topicId+':'+wordEs;}
+
+function srsGetRecord(topicId,wordEs){
+  const k=srsKey(topicId,wordEs);
+  if(!srsData[k])srsData[k]={interval:0,easeFactor:2.0,dueDate:null,streak:0,totalReviews:0};
+  return srsData[k];
+}
+
+function srsDaysBetween(d1,d2){
+  return Math.floor((new Date(d2)-new Date(d1))/(1000*60*60*24));
+}
+
+function srsTodayStr(){return new Date().toISOString().slice(0,10);}
+
+// quality: 0=wrong, 1=correct (kid-friendly — no partial credit gradations)
+function srsUpdateRecord(topicId,wordEs,quality){
+  const r=srsGetRecord(topicId,wordEs);
+  r.totalReviews++;
+  const today=srsTodayStr();
+  if(quality===1){
+    r.streak++;
+    // SM-2 adapted: gentler ease factor changes for kids
+    r.easeFactor=Math.max(SRS_MIN_EF, r.easeFactor + 0.08 - (1-quality)*0.2);
+    if(r.streak===1) r.interval=1;
+    else if(r.streak===2) r.interval=3;
+    else r.interval=Math.round(r.interval*r.easeFactor);
+    r.interval=Math.min(r.interval,30);
+  } else {
+    r.streak=0;
+    r.easeFactor=Math.max(SRS_MIN_EF, r.easeFactor-0.15);
+    r.interval=1; // always come back tomorrow if wrong
+  }
+  const due=new Date();due.setDate(due.getDate()+r.interval);
+  r.dueDate=due.toISOString().slice(0,10);
+  srsData[srsKey(topicId,wordEs)]=r;
+  saveSRS();
+}
+
+function srsMarkSeen(topicId,wordEs){
+  const r=srsGetRecord(topicId,wordEs);
+  if(!r.dueDate){
+    // First time seen — schedule for tomorrow
+    const due=new Date();due.setDate(due.getDate()+1);
+    r.dueDate=due.toISOString().slice(0,10);
+    r.totalReviews=0;
+    srsData[srsKey(topicId,wordEs)]=r;
+    saveSRS();
+  }
+}
+
+function srsGetDueWords(){
+  const today=srsTodayStr();
+  const due=[];
+  for(const [key,rec] of Object.entries(srsData)){
+    if(rec.dueDate && rec.dueDate<=today){
+      const [topicId,wordEs]=key.split(':');
+      const topic=TOPICS.find(t=>t.id===topicId);
+      if(!topic)continue;
+      const word=topic.words.find(w=>w.es===wordEs);
+      if(!word)continue;
+      due.push({topicId,word,record:rec,key});
+    }
+  }
+  return due;
+}
+
+function srsGetStrength(record){
+  // 0–100 strength score
+  if(!record.dueDate)return 0;
+  const lvl=SRS_INTERVALS.findIndex(i=>i>=record.interval);
+  return Math.round((Math.max(0,lvl)/SRS_INTERVALS.length)*100);
+}
+
+function srsGetMasteredCount(){
+  return Object.values(srsData).filter(r=>r.interval>=7&&r.streak>=3).length;
+}
+
+function saveSRS(){localStorage.setItem('lp_srs',JSON.stringify(srsData));}
+
+/* ── SRS Review session state ── */
+let srsQueue=[],srsSessionIdx=0,srsSessionPoints=0,srsMasteredThisSession=0,srsAnswered=false,srsRetryQueue=[];
+
+function renderReviewScreen(){
+  const due=srsGetDueWords();
+  const lobby=document.getElementById('srsLobby');
+  document.getElementById('srsGame').style.display='none';
+  document.getElementById('srsResults').style.display='none';
+  lobby.style.display='block';
+
+  if(due.length===0){
+    lobby.innerHTML=`
+      <div style="text-align:center;padding:30px 0">
+        <div style="font-size:56px;margin-bottom:12px">🎉</div>
+        <div style="font-size:22px;font-weight:900;color:#EF9F27;margin-bottom:8px">All caught up!</div>
+        <div style="font-size:14px;color:#888;margin-bottom:6px">No words due for review today.</div>
+        <div style="font-size:13px;color:#aaa;margin-bottom:24px">Keep playing games to build your word bank!</div>
+        <div style="background:#fff;border-radius:14px;padding:16px;border:2px solid #FAEEDA;margin-bottom:20px;text-align:left">
+          <div style="font-size:12px;font-weight:700;color:#EF9F27;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">Your word bank</div>
+          ${srsWordBankHTML()}
+        </div>
+        <button onclick="nav('vocab')" class="btn btn-purple">Play games to learn more words 📚</button>
+      </div>`;
+    return;
+  }
+
+  lobby.innerHTML=`
+    <div style="text-align:center;padding:8px 0 20px">
+      <div style="font-size:48px;margin-bottom:10px">🧠</div>
+      <div style="font-size:22px;font-weight:900;color:#EF9F27;margin-bottom:6px">${due.length} word${due.length!==1?'s':''} to review!</div>
+      <div style="font-size:14px;color:#888;margin-bottom:20px">These words are ready for a check-up. Let's see what you remember!</div>
+      <div style="background:#fff;border-radius:14px;padding:14px;border:2px solid #FAEEDA;margin-bottom:20px;text-align:left">
+        <div style="font-size:12px;font-weight:700;color:#EF9F27;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">Due today</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${due.map(d=>`<span style="background:#FFF8E6;border:1.5px solid #EF9F27;border-radius:99px;padding:4px 11px;font-size:12px;font-weight:700;color:#633806">${d.word.emoji} ${d.word.es}</span>`).join('')}
+        </div>
+      </div>
+      <button onclick="startSRSSession()" class="btn btn-amber" style="font-size:17px;padding:14px 40px">Start review 🧠</button>
+    </div>`;
+}
+
+function srsWordBankHTML(){
+  const all=Object.entries(srsData);
+  if(all.length===0)return'<div style="font-size:13px;color:#aaa">No words learned yet — play some games!</div>';
+  return all.slice(0,20).map(([key,rec])=>{
+    const [tid,es]=key.split(':');
+    const t=TOPICS.find(x=>x.id===tid);
+    const w=t&&t.words.find(x=>x.es===es);
+    if(!w)return'';
+    const str=srsGetStrength(rec);
+    const col=str>=70?'#00C9A7':str>=30?'#EF9F27':'#FF6B6B';
+    return`<span style="background:#F9F7FF;border:1.5px solid ${col};border-radius:99px;padding:3px 10px;font-size:11px;font-weight:700;color:${col};display:inline-block;margin:2px">${w.emoji} ${es}</span>`;
+  }).join('');
+}
+
+function startSRSSession(){
+  const due=srsGetDueWords();
+  srsQueue=shuffle([...due]);
+  srsSessionIdx=0;srsSessionPoints=0;srsMasteredThisSession=0;srsAnswered=false;srsRetryQueue=[];
+  document.getElementById('srsLobby').style.display='none';
+  document.getElementById('srsGame').style.display='block';
+  document.getElementById('srsResults').style.display='none';
+  renderSRSQuestion();
+}
+
+function renderSRSQuestion(){
+  const total=srsQueue.length;
+  const done=srsSessionIdx-srsRetryQueue.length;
+  const remaining=total-srsSessionIdx+srsRetryQueue.length;
+
+  if(srsSessionIdx>=srsQueue.length){
+    if(srsRetryQueue.length>0){
+      // Replay wrong answers
+      srsQueue=[...srsQueue,...shuffle(srsRetryQueue)];
+      srsRetryQueue=[];
+    } else {
+      endSRSSession();return;
+    }
+  }
+
+  const pct=Math.round((srsSessionIdx/srsQueue.length)*100);
+  document.getElementById('srsProgFill').style.width=pct+'%';
+  document.getElementById('srsQCount').textContent=remaining+' left';
+  document.getElementById('srsPoints').textContent=srsSessionPoints;
+  document.getElementById('srsMastered').textContent='✅ '+srsMasteredThisSession+' mastered';
+
+  const item=srsQueue[srsSessionIdx];
+  const rec=srsGetRecord(item.topicId,item.word.es);
+  const strength=srsGetStrength(rec);
+
+  // Alternate question types based on review count for variety
+  const useType=(rec.totalReviews%3===0)?'fill':'mc';
+
+  document.getElementById('srsCard').className='srs-card';
+  document.getElementById('srsEmoji').textContent=item.word.emoji;
+  // Speak Spanish when showing Spanish word; speak English when asking to translate to Spanish
+  if(useType==='fill'){
+    // Asking kid to type Spanish — speak English prompt after short delay
+    _currentWordES=item.word.es;
+    setTimeout(()=>speakEN(item.word.en),300);
+  } else {
+    const willShowEs=true; // MC always shows one language; speak ES for recall
+    _currentWordES=item.word.es;
+    setTimeout(()=>speakES(item.word.es),300);
+  }
+
+  // Strength bar
+  const sf=document.getElementById('srsStrengthFill');
+  sf.style.width=strength+'%';
+  sf.style.background=strength>=70?'#00C9A7':strength>=30?'#EF9F27':'#FF6B6B';
+
+  srsAnswered=false;
+  document.getElementById('srsFeedback').style.display='none';
+
+  if(useType==='mc'){
+    document.getElementById('srsModeTag').textContent='Multiple choice';
+    const showEs=Math.random()>0.4;
+    document.getElementById('srsPrompt').textContent=showEs?'What does this mean in English?':'How do you say this in Spanish?';
+    document.getElementById('srsWord').textContent=showEs?item.word.es:item.word.en;
+    const correct=showEs?item.word.en:item.word.es;
+    const topic=TOPICS.find(t=>t.id===item.topicId);
+    const wrongs=shuffle(topic.words.filter(w=>w.es!==item.word.es)).slice(0,3).map(w=>showEs?w.en:w.es);
+    const opts=shuffle([correct,...wrongs]);
+    document.getElementById('srsAnswerArea').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">${opts.map(o=>`<button class="srs-mc-btn" onclick="checkSRSMC('${o.replace(/'/g,"\\'")}','${correct.replace(/'/g,"\\'")}',this)">${o}</button>`).join('')}</div>`;
+  } else {
+    document.getElementById('srsModeTag').textContent='Spell it!';
+    document.getElementById('srsPrompt').textContent='How do you say "'+item.word.en+'" in Spanish?';
+    document.getElementById('srsWord').textContent=item.word.emoji;
+    document.getElementById('srsAnswerArea').innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:4px"><input class="srs-fill-input" id="srsFillInp" placeholder="Type in Spanish…" autocomplete="off" spellcheck="false"><button onclick="checkSRSFill()" style="background:#EF9F27;color:#fff;border:none;border-radius:12px;padding:10px 24px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #c4810f">Check ✓</button></div>`;
+    setTimeout(()=>{const i=document.getElementById('srsFillInp');if(i){i.focus();i.addEventListener('keydown',e=>{if(e.key==='Enter')checkSRSFill();});}},50);
+  }
+}
+
+function checkSRSMC(chosen,correct,btn){
+  if(srsAnswered)return;srsAnswered=true;
+  document.querySelectorAll('.srs-mc-btn').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('correct');else if(b===btn&&chosen!==correct)b.classList.add('wrong');});
+  const ok=chosen===correct;
+  handleSRSResult(ok,correct);
+}
+
+function checkSRSFill(){
+  if(srsAnswered)return;
+  const inp=document.getElementById('srsFillInp');
+  if(!inp||!inp.value.trim())return;
+  srsAnswered=true;
+  const item=srsQueue[srsSessionIdx];
+  const correct=item.word.es;
+  const ok=normalize(inp.value)===normalize(correct);
+  inp.classList.add(ok?'correct':'wrong');
+  inp.disabled=true;
+  document.querySelector('#srsAnswerArea button').disabled=true;
+  handleSRSResult(ok,correct);
+}
+
+function handleSRSResult(ok,correctAnswer){
+  const item=srsQueue[srsSessionIdx];
+  const card=document.getElementById('srsCard');
+  card.classList.add(ok?'flash-correct':'flash-wrong');
+  setTimeout(()=>card.classList.remove('flash-correct','flash-wrong'),500);
+
+  srsUpdateRecord(item.topicId,item.word.es,ok?1:0);
+  _currentWordES=item.word.es;
+  setTimeout(()=>speakES(item.word.es),350);
+
+  const rec=srsGetRecord(item.topicId,item.word.es);
+  const mastered=rec.interval>=7&&rec.streak>=3;
+
+  if(ok){
+    srsSessionPoints+=20;
+    xp+=10;streak++;
+    if(mastered)srsMasteredThisSession++;
+    save();updateHeader();
+    spawnFloat(mastered?'🌟 Mastered!':'+20',card,'#00C9A7');
+  } else {
+    srsRetryQueue.push(item);
+    streak=0;save();updateHeader();
+  }
+
+  const fb=document.getElementById('srsFeedback');
+  fb.style.cssText='display:flex;border-radius:13px;padding:13px 18px;margin-top:10px;align-items:center;gap:10px;font-weight:700;'+(ok?'background:#E0FAF4;border:2px solid #00C9A7;color:#007A6A':'background:#FFE8E8;border:2px solid #FF6B6B;color:#CC3333');
+  fb.innerHTML=`<span style="font-size:20px">${ok?(mastered?'🌟':'✅'):'❌'}</span><span style="flex:1;font-size:13px">${ok?(mastered?'¡Brillante! Word mastered — you\'re amazing! 🎉':'¡Correcto! Great memory! ⭐'):'Not quite! The answer was: <strong>'+correctAnswer+'</strong>'}</span><button onclick="nextSRS()" style="background:${ok?'#00C9A7':'#5B2FCC'};color:#fff;border:none;border-radius:10px;padding:7px 14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">Next →</button>`;
+  document.getElementById('srsPoints').textContent=srsSessionPoints;
+  document.getElementById('srsMastered').textContent='✅ '+srsMasteredThisSession+' mastered';
+}
+
+function nextSRS(){srsSessionIdx++;renderSRSQuestion();}
+
+function endSRSSession(){
+  document.getElementById('srsGame').style.display='none';
+  const res=document.getElementById('srsResults');res.style.display='block';
+  const total=srsQueue.length;
+  const correct=total-srsRetryQueue.length; // approximate
+  let emoji='😊',title='Good effort!';
+  if(srsMasteredThisSession>=3||srsSessionPoints>=100){emoji='🏆';title='¡Brillante!';confetti();}
+  else if(srsSessionPoints>=60){emoji='🌟';title='¡Muy bien!';}
+  xp+=srsSessionPoints;save();updateHeader();
+  res.innerHTML=`
+    <span style="font-size:58px;display:block;margin-bottom:10px;animation:bounce .6s ease">${emoji}</span>
+    <div style="font-size:24px;font-weight:900;color:#EF9F27;margin-bottom:4px">${title}</div>
+    <div style="font-size:52px;font-weight:900;color:#5B2FCC;margin:8px 0">${srsSessionPoints}</div>
+    <div style="font-size:13px;color:#aaa;margin-bottom:6px">points earned</div>
+    ${srsMasteredThisSession>0?`<div style="background:#E0FAF4;border:2px solid #00C9A7;border-radius:13px;padding:12px 16px;margin:12px 0;font-size:14px;font-weight:700;color:#007A6A">🌟 ${srsMasteredThisSession} word${srsMasteredThisSession!==1?'s':''} mastered today!</div>`:''}
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+      ${srsGetDueWords().length>0?`<button onclick="renderReviewScreen();document.getElementById('srsLobby').style.display='block';document.getElementById('srsResults').style.display='none'" class="btn btn-amber">Review more 🧠</button>`:''}
+      <button onclick="nav('home')" class="btn btn-outline">Home 🏠</button>
+    </div>`;
+  checkBadges();
+}
+
+/* ── Smart mode inside a topic (called from vocab grid) ── */
+function startSmartReview(topic){
+  // Collect all words for this topic that have been seen
+  const dueForTopic=srsGetDueWords().filter(d=>d.topicId===topic.id);
+  if(dueForTopic.length===0){
+    // No due words — do a fresh intro session for unseen words
+    const unseen=topic.words.filter(w=>!srsData[srsKey(topic.id,w.es)]);
+    if(unseen.length===0){
+      // All seen, but none due — just do normal learn
+      startLearn(topic);return;
+    }
+    // Show first 5 unseen words as a quick learn session
+    const toLearn=unseen.slice(0,5);
+    toLearn.forEach(w=>srsMarkSeen(topic.id,w.es));
+    currentTopic=topic;
+    // Build mini MC session
+    questions=toLearn.map(w=>{
+      const wrongs=shuffle(topic.words.filter(x=>x.es!==w.es)).slice(0,3).map(x=>x.en);
+      return{type:'mc',question:'What does "'+w.es+'" mean?',emoji:w.emoji,answer:w.en,options:shuffle([w.en,...wrongs]),word:w};
+    });
+    qIndex=0;score=0;answered=false;
+    showScreen('quizScreen');renderQuestion();
+    return;
+  }
+  // Route to main review screen with these words
+  srsQueue=shuffle(dueForTopic);
+  srsSessionIdx=0;srsSessionPoints=0;srsMasteredThisSession=0;srsAnswered=false;srsRetryQueue=[];
+  showScreen('reviewScreen');
+  document.getElementById('srsLobby').style.display='none';
+  document.getElementById('srsGame').style.display='block';
+  document.getElementById('srsResults').style.display='none';
+  renderSRSQuestion();
+}
+
+/* ═══════════════════════════════════════════
+   SAVE / LOAD / HEADER
+═══════════════════════════════════════════ */
+function save(){
+  localStorage.setItem('lp_xp',xp);localStorage.setItem('lp_streak',streak);
+  localStorage.setItem('lp_progress',JSON.stringify(progress));
+  localStorage.setItem('lp_speedbests',JSON.stringify(speedBests));
+  localStorage.setItem('lp_scramblebests',JSON.stringify(scrambleBests));
+  localStorage.setItem('lp_flashbests',JSON.stringify(flashBests));
+  localStorage.setItem('lp_bubblebests',JSON.stringify(bubbleBests));
+  localStorage.setItem('lp_badges',JSON.stringify(earnedBadges));
+  localStorage.setItem('lp_sbprogress',JSON.stringify(sbProgress));
+  localStorage.setItem('lp_culturescore',cultureScore);
+  localStorage.setItem('lp_dailydate',lastDailyDate);
+  saveSRS();
+  checkBadges();
+}
+
+function updateHeader(){
+  const xl=document.getElementById('xpLabel');if(xl)xl.textContent=xp+' XP';
+  const sn=document.getElementById('streakNum');if(sn)sn.textContent=streak;
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);if(el)el.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function nav(section){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const navEl=document.getElementById('nav-'+section);if(navEl)navEl.classList.add('active');
+  const map={home:'homeScreen',vocab:'vocabScreen',sentences:'sentencesScreen',culture:'cultureScreen',progress:'progressScreen',badges:'badgesScreen',watch:'watchScreen',review:'reviewScreen',grammar:'grammarScreen',me:'meScreen'};
+  if(map[section])showScreen(map[section]);
+  if(section==='home')renderHome();
+  else if(section==='vocab')renderVocabSection();
+  else if(section==='sentences')renderSentencesSection();
+  else if(section==='culture')renderCultureSection();
+  else if(section==='progress')renderProgress();
+  else if(section==='badges')renderBadges();
+  else if(section==='watch')renderWatchTopics();
+  else if(section==='review')renderReviewScreen();
+  else if(section==='grammar')renderGrammarSection();
+  else if(section==='me'){renderBadges();updateAudioBtnMe();}
+}
+
+function goHome(){clearSpeedTimer();clearBpTimer();nav('vocab');}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5);}
+
+/* ═══════════════════════════════════════════
+   HOME
+═══════════════════════════════════════════ */
+function renderHome(){
+  // Header XP + streak
+  document.getElementById('homeXP').textContent=xp+' XP';
+  document.getElementById('homeStreak').textContent='🔥 '+streak;
+  const hour=new Date().getHours();
+  const greeting=hour<12?'¡Buenos días! 🌅':hour<18?'¡Hola! 👋':'¡Buenas noches! 🌙';
+  document.getElementById('homeGreeting').textContent=greeting;
+
+  // Vocab sub-label
+  const done=Object.values(progress).filter(v=>v>=7).length;
+  const vEl=document.getElementById('hscVocabSub');
+  if(vEl)vEl.textContent=done+'/'+TOPICS.length+' done';
+
+  // Review banner
+  const due=srsGetDueWords();
+  const wrap=document.getElementById('reviewBannerWrap');
+  if(due.length>0){
+    wrap.innerHTML=`<div style="background:linear-gradient(135deg,#EF9F27,#F5C842);border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="nav('review')">
+      <div style="font-size:28px">🧠</div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:900;color:#fff">${due.length} word${due.length!==1?'s':''} due for review</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.85);margin-top:2px">Keep your words strong — tap to start</div>
+      </div>
+      <div style="background:rgba(255,255,255,.25);border-radius:10px;padding:6px 14px;font-size:13px;font-weight:800;color:#fff">Go →</div>
+    </div>`;
+  } else {
+    wrap.innerHTML='';
+  }
+
+  // Daily challenge
+  const topicIdx=new Date().getDate()%TOPICS.length;
+  const modeIdx=new Date().getDay()%3;
+  const modes=['learn','speed','scramble'];
+  const modeNames={learn:'Learn Quiz',speed:'Speed Round',scramble:'Word Scramble'};
+  const dailyTopic=TOPICS[topicIdx];
+  document.getElementById('dailySub').textContent=dailyTopic.name+' · '+modeNames[modes[modeIdx]]+' · ~2 mins';
+  document.getElementById('dailyBanner').dataset.topic=dailyTopic.id;
+  document.getElementById('dailyBanner').dataset.mode=modes[modeIdx];
+
+  // Recent topics
+  const recent=document.getElementById('recentTopics');recent.innerHTML='';
+  const started=TOPICS.filter(t=>progress[t.id]>0||srsData[srsKey(t.id,t.words[0].es)]);
+  const toShow=started.length>0?started.slice(-5):TOPICS.slice(0,5);
+  toShow.forEach(t=>{
+    const pct=Math.round(((progress[t.id]||0)/t.words.length)*100);
+    const dueCount=srsGetDueWords().filter(d=>d.topicId===t.id).length;
+    const card=document.createElement('div');
+    card.style.cssText='background:#fff;border-radius:14px;padding:12px 14px;border:2px solid #eee;cursor:pointer;flex-shrink:0;min-width:100px;text-align:center;transition:all .12s;position:relative';
+    let inner='';
+    if(dueCount>0)inner+=`<div style="position:absolute;top:-6px;right:-6px;background:#EF9F27;color:#fff;border-radius:99px;font-size:10px;font-weight:800;padding:2px 7px">${dueCount}</div>`;
+    inner+=`<div style="font-size:22px;margin-bottom:4px">${t.icon}</div><div style="font-size:11px;font-weight:800;color:#333;line-height:1.2">${t.name}</div><div style="font-size:10px;color:#aaa;margin-top:2px">${pct>0?pct+'%':'Start'}</div>`;
+    card.innerHTML=inner;
+    card.onmouseenter=()=>{card.style.borderColor=t.color;card.style.transform='translateY(-2px)';};
+    card.onmouseleave=()=>{card.style.borderColor='#eee';card.style.transform='none';};
+    card.onclick=()=>{nav('vocab');setTimeout(()=>startLearn(t),100);};
+    recent.appendChild(card);
+  });
+}
+
+function startDaily(){
+  const b=document.getElementById('dailyBanner');
+  const topic=TOPICS.find(t=>t.id===b.dataset.topic);const mode=b.dataset.mode;
+  if(!topic)return;
+  nav('vocab');
+  setTimeout(()=>{
+    currentTopic=topic;
+    if(mode==='learn')startLearn(topic);
+    else if(mode==='speed')openSpeedLobby(topic);
+    else openScrambleLobby(topic);
+    const today=new Date().toDateString();
+    if(lastDailyDate!==today){lastDailyDate=today;save();}
+  },150);
+}
+
+/* ═══════════════════════════════════════════
+   VOCAB SECTION
+═══════════════════════════════════════════ */
+function renderVocabSection(){
+  const MODES=[['learn','📚 Learn'],['smart','🧠 Smart Review'],['speed','⚡ Speed'],['scramble','🧩 Scramble'],['flash','🃏 Flashcards'],['bubble','🫧 Bubble Pop'],['watch','📺 Watch']];
+  const tabs=document.getElementById('vocabModeTabs');tabs.innerHTML='';
+  MODES.forEach(([m,label])=>{
+    const btn=document.createElement('button');const active=m===currentMode;
+    btn.style.cssText='font-family:\'Nunito\',sans-serif;font-size:12px;font-weight:800;border-radius:99px;padding:7px 14px;cursor:pointer;border:2px solid '+(active?'#5B2FCC':'#ddd')+';background:'+(active?'#5B2FCC':'#fff')+';color:'+(active?'#fff':'#888')+';transition:all .12s';
+    btn.textContent=label;
+    btn.onclick=()=>{if(m==='watch'){nav('watch');return;}currentMode=m;renderVocabSection();};
+    tabs.appendChild(btn);
+  });
+
+  const CATEGORIES=[
+    {label:'Original 10',ids:['greetings','numbers','animals','colours','food','family','classroom','body','weather','days']},
+    {label:'Everyday world',ids:['clothes','house','town','transport','shopping','technology','nature']},
+    {label:'Me & my life',ids:['feelings','sports','music','health','subjects','celebrations']},
+    {label:'Language building blocks',ids:['numbers2','time','directions','adjectives','verbs','questions','connectives']}
+  ];
+
+  const grid=document.getElementById('topicsGrid');
+  grid.innerHTML='';
+  grid.style.display='block';
+
+  CATEGORIES.forEach(cat=>{
+    const catTopics=cat.ids.map(id=>TOPICS.find(t=>t.id===id)).filter(Boolean);
+
+    const catLabel=document.createElement('div');
+    catLabel.style.cssText='font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px';
+    catLabel.textContent=cat.label;
+    grid.appendChild(catLabel);
+
+    const catGrid=document.createElement('div');
+    catGrid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:4px';
+
+    catTopics.forEach(t=>{
+      const done=progress[t.id]||0,pct=Math.round((done/t.words.length)*100);
+      const dueCount=srsGetDueWords().filter(d=>d.topicId===t.id).length;
+      const masteredCount=Object.entries(srsData).filter(([k,r])=>k.startsWith(t.id+':')&&r.interval>=7&&r.streak>=3).length;
+      const card=document.createElement('div');
+      card.style.cssText='background:#fff;border-radius:14px;padding:16px 10px;border:2.5px solid #eee;cursor:pointer;text-align:center;transition:all .15s;position:relative';
+      let badge='';
+      if(currentMode==='smart'&&dueCount>0)badge=`<div style="position:absolute;top:-7px;right:-7px;background:#EF9F27;color:#fff;border-radius:99px;font-size:10px;font-weight:800;padding:2px 8px">${dueCount} due</div>`;
+      if(currentMode==='smart'&&masteredCount>0)badge+=`<div style="font-size:9px;background:#E0FAF4;color:#007A6A;border-radius:99px;padding:2px 7px;margin-top:4px;display:inline-block;font-weight:700">⭐ ${masteredCount}</div>`;
+      card.innerHTML=badge+`<div style="font-size:26px;margin-bottom:5px">${t.icon}</div><div style="font-size:12px;font-weight:800;color:#333;margin-bottom:3px;line-height:1.2">${t.name}</div><div style="font-size:10px;color:#aaa;font-weight:600">${done>0?pct+'% done':'Tap to start!'}</div>${pct>=70?'<div style="font-size:9px;background:#5B2FCC;color:#fff;border-radius:99px;padding:2px 7px;margin-top:4px;display:inline-block;font-weight:700">★ Done</div>':''}`;
+      card.onmouseenter=()=>{card.style.borderColor=t.color;card.style.boxShadow='0 4px 0 '+t.color;card.style.transform='translateY(-3px)';};
+      card.onmouseleave=()=>{card.style.borderColor='#eee';card.style.boxShadow='none';card.style.transform='none';};
+      const fns={learn:startLearn,smart:startSmartReview,speed:openSpeedLobby,scramble:openScrambleLobby,flash:openFlashLobby,bubble:openBubbleLobby};
+      card.onclick=()=>{if(fns[currentMode])fns[currentMode](t);};
+      catGrid.appendChild(card);
+    });
+
+    grid.appendChild(catGrid);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   LEARN QUIZ — marks words seen for SRS
+═══════════════════════════════════════════ */
+function startLearn(topic){
+  currentTopic=topic;questions=buildQuestions(topic);qIndex=0;score=0;answered=false;
+  showScreen('quizScreen');renderQuestion();
+}
+
+function buildQuestions(topic){
+  const words=shuffle(topic.words).slice(0,8);const qs=[];
+  words.forEach((w,i)=>{
+    srsMarkSeen(topic.id,w.es); // Register word in SRS on first encounter
+    const type=i<3?'mc':i<5?'fill':'match';
+    if(type==='mc'){const wrongs=shuffle(topic.words.filter(x=>x.es!==w.es)).slice(0,3).map(x=>x.en);qs.push({type:'mc',question:'What does "'+w.es+'" mean?',emoji:w.emoji,answer:w.en,options:shuffle([w.en,...wrongs]),word:w});}
+    else if(type==='fill'){qs.push({type:'fill',question:'How do you say "'+w.en+'" in Spanish?',emoji:w.emoji,answer:w.es,word:w});}
+    else{qs.push({type:'match',pairs:shuffle(words.slice(i,Math.min(i+4,words.length))).map(x=>({es:x.es,en:x.en}))});}
+  });
+  const out=[];let hm=false;
+  qs.forEach(q=>{if(q.type==='match'){if(!hm){out.push(q);hm=true;}}else out.push(q);});
+  return out;
+}
+
+function renderQuestion(){
+  const q=questions[qIndex];
+  document.getElementById('progressFill').style.width=((qIndex/questions.length)*100)+'%';
+  document.getElementById('qCount').textContent=(qIndex+1)+'/'+questions.length;
+  document.getElementById('feedbackBar').className='feedback';answered=false;
+  if(q.type==='mc')renderMC(q);else if(q.type==='fill')renderFill(q);else renderMatch(q);
+}
+
+function renderMC(q){
+  document.getElementById('questionBox').innerHTML='<div class="q-tag">Multiple choice</div><div style="font-size:19px;font-weight:900;color:#333;line-height:1.3">'+q.question+'</div><span style="font-size:42px;margin:12px 0;display:block">'+q.emoji+'</span>';
+  document.getElementById('answerArea').innerHTML='<div class="choices" id="choicesGrid"></div>';
+  q.options.forEach(opt=>{const btn=document.createElement('button');btn.className='choice-btn';btn.textContent=opt;btn.onclick=()=>checkMC(opt,q.answer,q.word);document.getElementById('choicesGrid').appendChild(btn);});
+  const esWord=q.question.match(/"([^"]+)"/)?.[1]||'';
+  _currentWordES=esWord;
+  speakES(esWord);
+}
+
+function checkMC(chosen,correct,word){
+  if(answered)return;answered=true;
+  document.querySelectorAll('.choice-btn').forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add('correct');else if(b.textContent===chosen&&chosen!==correct)b.classList.add('wrong');});
+  const ok=chosen===correct;
+  if(ok){score++;xp+=10;streak++;if(currentTopic&&word)srsUpdateRecord(currentTopic.id,word.es,1);showFeedback(true,'¡Correcto! Well done! 🌟');}
+  else{streak=0;if(currentTopic&&word)srsUpdateRecord(currentTopic.id,word.es,0);showFeedback(false,'Not quite — the answer was: '+correct);}
+  if(currentTopic&&word)setTimeout(()=>speakES(word.es),400);
+  save();updateHeader();
+}
+
+function renderFill(q){
+  document.getElementById('questionBox').innerHTML='<div class="q-tag">Fill in the blank</div><div style="font-size:19px;font-weight:900;color:#333;line-height:1.3">'+q.question+'</div><span style="font-size:42px;margin:12px 0;display:block">'+q.emoji+'</span>';
+  document.getElementById('answerArea').innerHTML='<div style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:8px"><input class="fill-input" id="fillInput" placeholder="Type in Spanish…" autocomplete="off" spellcheck="false"><button class="btn btn-purple btn-sm" id="subBtn" onclick="checkFill()">Check ✓</button></div>';
+  const inp=document.getElementById('fillInput');inp.focus();
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkFill();});
+  document.getElementById('subBtn')._answer=q.answer;
+  document.getElementById('subBtn')._word=q.word;
+  _currentWordES=q.answer;
+}
+
+function normalize(s){return s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[¿¡]/g,'');}
+
+function checkFill(){
+  if(answered)return;const inp=document.getElementById('fillInput'),correct=document.getElementById('subBtn')._answer,word=document.getElementById('subBtn')._word;
+  if(!inp.value.trim())return;answered=true;document.getElementById('subBtn').disabled=true;
+  const ok=normalize(inp.value)===normalize(correct);
+  inp.classList.add(ok?'correct':'wrong');
+  if(ok){score++;xp+=15;streak++;if(currentTopic&&word)srsUpdateRecord(currentTopic.id,word.es,1);showFeedback(true,'¡Perfecto! Great spelling! ⭐');}
+  else{streak=0;if(currentTopic&&word)srsUpdateRecord(currentTopic.id,word.es,0);showFeedback(false,"Almost! It's '"+correct+"' — keep practising!");}
+  setTimeout(()=>speakES(correct),400);
+  save();updateHeader();
+}
+
+function renderMatch(q){
+  document.getElementById('questionBox').innerHTML='<div class="q-tag">Match the pairs</div><div style="font-size:18px;font-weight:900;color:#333">Match each word to its meaning!</div>';
+  matchPairs=shuffle(q.pairs);matchDone=0;matchSelected={left:null,right:null};
+  const lefts=shuffle([...matchPairs]),rights=shuffle([...matchPairs]);
+  document.getElementById('answerArea').innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px"><div id="mLeft" style="display:flex;flex-direction:column;gap:7px"></div><div id="mRight" style="display:flex;flex-direction:column;gap:7px"></div></div>';
+  lefts.forEach(p=>{const d=document.createElement('div');d.className='match-item';d.dataset.es=p.es;d.textContent=p.es;d.onclick=()=>selectMatch('left',p.es,d);document.getElementById('mLeft').appendChild(d);});
+  rights.forEach(p=>{const d=document.createElement('div');d.className='match-item';d.dataset.en=p.en;d.textContent=p.en;d.onclick=()=>selectMatch('right',p.en,d);document.getElementById('mRight').appendChild(d);});
+}
+
+function selectMatch(side,val,el){
+  if(el.classList.contains('matched'))return;
+  if(side==='left'){document.querySelectorAll('#mLeft .match-item').forEach(e=>e.classList.remove('selected'));matchSelected.left=val;el.classList.add('selected');}
+  else{document.querySelectorAll('#mRight .match-item').forEach(e=>e.classList.remove('selected'));matchSelected.right=val;el.classList.add('selected');}
+  if(matchSelected.left&&matchSelected.right){
+    const pair=matchPairs.find(p=>p.es===matchSelected.left);
+    if(pair&&pair.en===matchSelected.right){
+      document.querySelectorAll('#mLeft .match-item').forEach(e=>{if(e.dataset.es===matchSelected.left){e.classList.add('matched');e.classList.remove('selected');}});
+      document.querySelectorAll('#mRight .match-item').forEach(e=>{if(e.dataset.en===matchSelected.right){e.classList.add('matched');e.classList.remove('selected');}});
+      matchDone++;xp+=8;streak++;score+=0.5;
+      if(currentTopic){const p=matchPairs.find(x=>x.es===matchSelected.left);if(p)srsUpdateRecord(currentTopic.id,p.es,1);}
+      save();updateHeader();
+      if(matchDone===matchPairs.length){answered=true;setTimeout(()=>showFeedback(true,'All matched! ¡Excelente! 🎉'),300);}
+    } else {
+      document.querySelectorAll('.match-item.selected').forEach(e=>{e.classList.add('wrong-flash');setTimeout(()=>e.classList.remove('wrong-flash'),400);});
+      if(currentTopic){const p=matchPairs.find(x=>x.es===matchSelected.left);if(p)srsUpdateRecord(currentTopic.id,p.es,0);}
+      streak=0;save();updateHeader();
+    }
+    matchSelected={left:null,right:null};document.querySelectorAll('.match-item.selected').forEach(e=>e.classList.remove('selected'));
+  }
+}
+
+function showFeedback(ok,msg){
+  const bar=document.getElementById('feedbackBar');bar.className='feedback '+(ok?'correct':'wrong');
+  document.getElementById('feedbackIcon').textContent=ok?'✅':'❌';document.getElementById('feedbackMsg').textContent=msg;
+}
+
+function nextQuestion(){qIndex++;if(qIndex>=questions.length){showQuizResults();return;}renderQuestion();}
+
+function showQuizResults(){
+  const total=questions.length,pct=Math.round((score/total)*100);
+  progress[currentTopic.id]=Math.max(progress[currentTopic.id]||0,Math.round(score));save();
+  let emoji='😊',title='Good try!',msg="Keep practising!";
+  if(pct>=90){emoji='🏆';title='¡Increíble!';msg="You're a Spanish superstar!";confetti();}
+  else if(pct>=70){emoji='🌟';title='¡Muy bien!';msg="Really great work!";}
+  else if(pct>=50){emoji='😊';title='¡Bien!';msg='Good effort!';}
+  document.getElementById('resultsEmoji').textContent=emoji;document.getElementById('resultsTitle').textContent=title;
+  document.getElementById('scoreBig').textContent=Math.round(score)+'/'+total;document.getElementById('resultsMsg').textContent=msg;
+  showScreen('resultsScreen');
+}
+
+function retryTopic(){startLearn(currentTopic);}
+
+/* ═══════════════════════════════════════════
+   SENTENCES
+═══════════════════════════════════════════ */
+function renderSentencesSection(){
+  const tabs=document.getElementById('sbLevelTabs');tabs.innerHTML='';
+  [1,2,3].forEach(l=>{
+    const btn=document.createElement('button');
+    const labels=['Simple','With adjectives','Advanced'];
+    btn.style.cssText='font-family:\'Nunito\',sans-serif;font-size:12px;font-weight:800;border-radius:12px;padding:8px 16px;cursor:pointer;border:2.5px solid #ddd;background:#fff;color:#888;transition:all .12s';
+    btn.textContent='Level '+l+': '+labels[l-1];
+    btn.onclick=()=>startSentenceBuilder(l);tabs.appendChild(btn);
+  });
+  document.getElementById('sbResults').style.display='none';
+  startSentenceBuilder(1);
+}
+
+function startSentenceBuilder(level){
+  currentSbLevel=level;sbIdx=0;sbScore=0;sbAnswered=false;
+  sbSentences=shuffle([...SB_SENTENCES[level]]);
+  document.getElementById('sbResults').style.display='none';
+  document.querySelectorAll('#sbLevelTabs button').forEach((b,i)=>{
+    const active=i+1===level;
+    b.style.borderColor=active?'#00C9A7':'#ddd';b.style.background=active?'#00C9A7':'#fff';b.style.color=active?'#fff':'#888';
+  });
+  renderSBQuestion();
+}
+
+function renderSBQuestion(){
+  if(sbIdx>=sbSentences.length){endSB();return;}
+  const s=sbSentences[sbIdx];sbPlaced=[];sbAnswered=false;
+  const allWords=shuffle([...s.es,...s.distractors.slice(0,4)]);
+  const area=document.getElementById('sbQuestionArea');
+  area.innerHTML='<div style="background:#fff;border-radius:18px;padding:22px;border:2.5px solid #E0FAF4;box-shadow:0 4px 0 #E0FAF4;margin-bottom:14px"><div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Build this sentence in Spanish:</div><div style="font-size:19px;font-weight:900;color:#333;margin-bottom:16px">"'+s.en+'"</div><div style="font-size:11px;font-weight:700;color:#00C9A7;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">Your answer:</div><div id="sbDropZone" style="min-height:46px;background:#F4F0FF;border:2.5px dashed #00C9A7;border-radius:14px;padding:8px 12px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:0"><span style="color:#aaa;font-size:13px;font-weight:600">Tap words below...</span></div></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px" id="sbWordBank">'+allWords.map(w=>'<button onclick="sbPlace(this,\''+w+'\')" style="background:#fff;border:2.5px solid #00C9A7;border-radius:10px;padding:8px 14px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;color:#007A6A;cursor:pointer;transition:all .12s">'+w+'</button>').join('')+'</div><div style="display:flex;gap:10px;justify-content:center"><button onclick="sbClear()" style="background:#fff;border:2px solid #ddd;border-radius:12px;padding:10px 20px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;color:#aaa;cursor:pointer">Clear</button><button onclick="sbCheck()" style="background:#00C9A7;color:#fff;border:none;border-radius:12px;padding:10px 24px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #00a88d">Check ✓</button></div><div id="sbFeedback" style="border-radius:13px;padding:13px 18px;margin-top:12px;display:none;align-items:center;gap:10px;font-weight:700"></div><div style="text-align:center;margin-top:10px;font-size:13px;color:#aaa;font-weight:600">'+(sbIdx+1)+' / '+sbSentences.length+'</div>';
+}
+
+function sbPlace(btn,word){
+  if(sbAnswered||btn.classList.contains('sb-used'))return;
+  btn.classList.add('sb-used');btn.style.opacity='0.35';btn.style.pointerEvents='none';
+  sbPlaced.push({word,btn});
+  const zone=document.getElementById('sbDropZone');
+  if(zone.children[0]&&zone.children[0].tagName==='SPAN')zone.innerHTML='';
+  zone.style.borderStyle='solid';
+  const chip=document.createElement('button');
+  chip.style.cssText='background:#00C9A7;color:#fff;border:none;border-radius:9px;padding:7px 13px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer';
+  chip.textContent=word;
+  chip.onclick=()=>{btn.classList.remove('sb-used');btn.style.opacity='1';btn.style.pointerEvents='auto';const idx=sbPlaced.findIndex(p=>p.btn===btn);if(idx>-1)sbPlaced.splice(idx,1);chip.remove();if(zone.children.length===0){zone.style.borderStyle='dashed';zone.innerHTML='<span style="color:#aaa;font-size:13px;font-weight:600">Tap words below...</span>';}};
+  zone.appendChild(chip);
+}
+
+function sbClear(){
+  sbPlaced.forEach(p=>{p.btn.classList.remove('sb-used');p.btn.style.opacity='1';p.btn.style.pointerEvents='auto';});
+  sbPlaced=[];const zone=document.getElementById('sbDropZone');zone.style.borderStyle='dashed';zone.innerHTML='<span style="color:#aaa;font-size:13px;font-weight:600">Tap words below...</span>';
+}
+
+function sbCheck(){
+  if(sbAnswered)return;const s=sbSentences[sbIdx];
+  const attempt=sbPlaced.map(p=>p.word);const correct=JSON.stringify(attempt)===JSON.stringify(s.es);
+  sbAnswered=true;const fb=document.getElementById('sbFeedback');
+  if(correct){sbScore++;xp+=15;streak++;sbProgress[currentSbLevel]=(sbProgress[currentSbLevel]||0)+1;save();updateHeader();spawnFloat('+15',document.getElementById('sbDropZone'),'#00C9A7');fb.style.cssText='border-radius:13px;padding:13px 18px;margin-top:12px;display:flex;align-items:center;gap:10px;font-weight:700;background:#E0FAF4;border:2px solid #00C9A7;color:#007A6A';fb.innerHTML='<span style="font-size:22px">✅</span><span style="flex:1;font-size:14px">¡Correcto! Perfect sentence! 🌟</span><button onclick="sbNext()" style="background:#00C9A7;color:#fff;border:none;border-radius:10px;padding:7px 14px;font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">Next →</button>';}
+  else{streak=0;save();updateHeader();fb.style.cssText='border-radius:13px;padding:13px 18px;margin-top:12px;display:flex;align-items:center;gap:10px;font-weight:700;background:#FFE8E8;border:2px solid #FF6B6B;color:#CC3333';fb.innerHTML='<span style="font-size:22px">❌</span><span style="flex:1;font-size:13px">Not quite! The answer was: <strong style="display:block;margin-top:3px">'+s.es.join(' ')+'</strong></span><button onclick="sbNext()" style="background:#5B2FCC;color:#fff;border:none;border-radius:10px;padding:7px 14px;font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">Next →</button>';}
+}
+
+function sbNext(){sbIdx++;renderSBQuestion();}
+
+function endSB(){
+  document.getElementById('sbQuestionArea').innerHTML='';
+  const res=document.getElementById('sbResults');res.style.display='block';
+  let emoji='😊',title='Good effort!';const pct=sbScore/sbSentences.length;
+  if(pct>=0.875){emoji='🏆';title='¡Increíble!';confetti();}else if(pct>=0.625){emoji='🌟';title='¡Muy bien!';}else if(pct>=0.5){emoji='🧱';title='¡Bien hecho!';}
+  document.getElementById('sbResEmoji').textContent=emoji;document.getElementById('sbResTitle').textContent=title;document.getElementById('sbResScore').textContent=sbScore+'/'+sbSentences.length;
+}
+
+/* ═══════════════════════════════════════════
+   CULTURE
+═══════════════════════════════════════════ */
+function renderCultureSection(){
+  const TABS=[['facts','📖 Facts'],['quiz','❓ Quiz'],['countries','🗺️ Countries']];
+  const tabsEl=document.getElementById('cultureTabs');tabsEl.innerHTML='';
+  TABS.forEach(([id,label])=>{
+    const btn=document.createElement('button');const active=id===cultureTab;
+    btn.style.cssText='font-family:\'Nunito\',sans-serif;font-size:12px;font-weight:800;border-radius:99px;padding:7px 14px;cursor:pointer;border:2px solid '+(active?'#EF9F27':'#ddd')+';background:'+(active?'#EF9F27':'#fff')+';color:'+(active?'#fff':'#888')+';transition:all .12s';
+    btn.textContent=label;btn.onclick=()=>{cultureTab=id;renderCultureSection();};tabsEl.appendChild(btn);
+  });
+  const content=document.getElementById('cultureContent');content.innerHTML='';
+  if(cultureTab==='facts'){
+    const cats=[...new Set(CULTURE_FACTS.map(f=>f.category))];
+    cats.forEach(cat=>{
+      const label=document.createElement('div');label.style.cssText='font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px';label.textContent=cat;content.appendChild(label);
+      CULTURE_FACTS.filter(f=>f.category===cat).forEach(f=>{
+        const card=document.createElement('div');card.style.cssText='background:#fff;border-radius:14px;padding:16px;border:2px solid #FAEEDA;margin-bottom:10px';
+        card.innerHTML='<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:22px">'+f.flag+'</span><span style="font-size:14px;font-weight:800;color:#333">'+f.country+'</span><span style="font-size:10px;font-weight:700;background:#FAEEDA;color:#633806;border:1px solid #EF9F27;border-radius:99px;padding:2px 8px;margin-left:auto">'+f.category+'</span></div><p style="font-size:13px;color:#555;line-height:1.6">'+f.fact+'</p>';
+        content.appendChild(card);
+      });
+    });
+  }else if(cultureTab==='quiz'){cultureQIdx=0;cultureQScore=0;cultureQAnswered=false;renderCultureQuiz();}
+  else{
+    [{flag:'🇪🇸',name:'Spain',capital:'Madrid',pop:'47 million'},{flag:'🇲🇽',name:'Mexico',capital:'Mexico City',pop:'130 million'},{flag:'🇦🇷',name:'Argentina',capital:'Buenos Aires',pop:'45 million'},{flag:'🇨🇴',name:'Colombia',capital:'Bogotá',pop:'51 million'},{flag:'🇵🇪',name:'Peru',capital:'Lima',pop:'33 million'},{flag:'🇨🇺',name:'Cuba',capital:'Havana',pop:'11 million'}].forEach(c=>{
+      const card=document.createElement('div');card.style.cssText='background:#fff;border-radius:14px;padding:14px;border:2px solid #FAEEDA;margin-bottom:10px;display:flex;align-items:center;gap:12px';
+      card.innerHTML='<span style="font-size:30px">'+c.flag+'</span><div><div style="font-size:15px;font-weight:800;color:#333">'+c.name+'</div><div style="font-size:12px;color:#888;margin-top:2px">🏛️ '+c.capital+' · 👥 '+c.pop+'</div></div>';
+      content.appendChild(card);
+    });
+  }
+}
+
+function renderCultureQuiz(){
+  const content=document.getElementById('cultureContent');
+  if(cultureQIdx>=CULTURE_QUIZ.length){
+    cultureScore+=cultureQScore;save();
+    content.innerHTML='<div style="text-align:center;padding:20px 0"><div style="font-size:52px;margin-bottom:10px">'+(cultureQScore>=8?'🏆':cultureQScore>=5?'🌟':'😊')+'</div><div style="font-size:22px;font-weight:900;color:#EF9F27;margin-bottom:6px">'+(cultureQScore>=8?'Excellent!':'Well done!')+'</div><div style="font-size:40px;font-weight:900;color:#5B2FCC;margin:8px 0">'+cultureQScore+'/'+CULTURE_QUIZ.length+'</div><div style="font-size:14px;color:#aaa;margin-bottom:20px">questions correct</div><button onclick="cultureQIdx=0;cultureQScore=0;renderCultureQuiz()" style="background:#EF9F27;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-family:\'Nunito\',sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #c4810f">Try again 🔄</button></div>';
+    if(cultureQScore>=8)confetti();return;
+  }
+  const q=CULTURE_QUIZ[cultureQIdx];cultureQAnswered=false;
+  content.innerHTML='<div style="text-align:center;font-size:12px;font-weight:700;color:#aaa;margin-bottom:12px">'+(cultureQIdx+1)+' / '+CULTURE_QUIZ.length+'</div><div style="background:#fff;border-radius:16px;padding:20px;border:2px solid #FAEEDA;margin-bottom:14px;text-align:center"><div style="font-size:16px;font-weight:900;color:#333;line-height:1.4">'+q.q+'</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px" id="cqOpts">'+q.opts.map((o,i)=>'<button onclick="cultureAnswer('+i+','+q.correct+')" style="background:#fff;border:2.5px solid #ddd;border-radius:13px;padding:13px 10px;cursor:pointer;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:700;color:#333;text-align:center;transition:all .12s">'+o+'</button>').join('')+'</div><div id="cqFeedback" style="margin-top:12px;display:none"></div>';
+}
+
+function cultureAnswer(chosen,correct){
+  if(cultureQAnswered)return;cultureQAnswered=true;const ok=chosen===correct;
+  document.querySelectorAll('#cqOpts button').forEach((b,i)=>{b.disabled=true;if(i===correct)b.style.cssText+=';background:#E0FAF4;border-color:#00C9A7;color:#007A6A';else if(i===chosen&&!ok)b.style.cssText+=';background:#FFE8E8;border-color:#FF6B6B;color:#CC3333';});
+  if(ok){cultureQScore++;xp+=8;streak++;}else{streak=0;}save();updateHeader();
+  const fb=document.getElementById('cqFeedback');
+  fb.style.cssText='border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-weight:700;'+(ok?'background:#E0FAF4;border:2px solid #00C9A7;color:#007A6A':'background:#FFE8E8;border:2px solid #FF6B6B;color:#CC3333');
+  fb.innerHTML='<span style="font-size:20px">'+(ok?'✅':'❌')+'</span><span style="flex:1;font-size:13px">'+(ok?'¡Correcto! Well done! 🌟':'Not quite — the answer was: '+CULTURE_QUIZ[cultureQIdx].opts[correct])+'</span><button onclick="cultureQIdx++;renderCultureQuiz()" style="background:#EF9F27;color:#fff;border:none;border-radius:9px;padding:6px 14px;font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">Next →</button>';
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESS
+═══════════════════════════════════════════ */
+function renderProgress(){
+  document.getElementById('progXP').textContent=xp;document.getElementById('progStreak').textContent=streak;
+  document.getElementById('progDone').textContent=Object.values(progress).filter(v=>v>=7).length;document.getElementById('progBadges').textContent=earnedBadges.length;
+
+  // SRS summary block
+  const mastered=srsGetMasteredCount();
+  const total=Object.keys(srsData).length;
+  const due=srsGetDueWords().length;
+  document.getElementById('srsSummaryBlock').innerHTML=`
+    <div style="background:#fff;border-radius:14px;padding:16px;border:2px solid #FAEEDA;margin-bottom:4px">
+      <div style="font-size:12px;font-weight:700;color:#EF9F27;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">🧠 Smart Review stats</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center">
+        <div><div style="font-size:22px;font-weight:900;color:#EF9F27">${total}</div><div style="font-size:11px;color:#aaa;font-weight:700">Words seen</div></div>
+        <div><div style="font-size:22px;font-weight:900;color:#00C9A7">${mastered}</div><div style="font-size:11px;color:#aaa;font-weight:700">Mastered</div></div>
+        <div><div style="font-size:22px;font-weight:900;color:#FF6B6B">${due}</div><div style="font-size:11px;color:#aaa;font-weight:700">Due today</div></div>
+      </div>
+      ${total>0?`<div style="margin-top:12px"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#aaa;margin-bottom:4px"><span>Overall mastery</span><span>${Math.round((mastered/Math.max(total,1))*100)}%</span></div><div style="background:#FAEEDA;border-radius:99px;height:10px;overflow:hidden"><div style="height:100%;border-radius:99px;background:#EF9F27;width:${Math.round((mastered/Math.max(total,1))*100)}%;transition:width .5s ease"></div></div></div>`:''}
+    </div>`;
+
+  const list=document.getElementById('progTopicList');list.innerHTML='';
+  TOPICS.forEach(t=>{
+    const done=progress[t.id]||0,pct=Math.round((done/t.words.length)*100);
+    const topicMastered=Object.entries(srsData).filter(([k,r])=>k.startsWith(t.id+':')&&r.interval>=7&&r.streak>=3).length;
+    const topicSeen=Object.entries(srsData).filter(([k])=>k.startsWith(t.id+':')).length;
+    const div=document.createElement('div');div.style.cssText='background:#fff;border-radius:14px;padding:14px;border:2px solid #eee';
+    div.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">${t.icon}</span><span style="font-size:14px;font-weight:800;color:#333">${t.name}</span></div><span style="font-size:13px;font-weight:700;color:#5B2FCC">${pct}%</span></div><div style="background:#EDE5FF;border-radius:99px;height:8px;overflow:hidden;margin-bottom:8px"><div style="height:100%;border-radius:99px;background:#5B2FCC;width:${pct}%;transition:width .5s ease"></div></div><div style="display:flex;gap:10px;font-size:11px;font-weight:700;color:#aaa"><span>🧠 ${topicSeen}/${t.words.length} seen</span><span>⭐ ${topicMastered} mastered</span></div>`;
+    list.appendChild(div);
+  });
+
+  const bests=document.getElementById('progBestScores');bests.innerHTML='';
+  [{key:speedBests,label:'⚡ Speed',color:'#5B2FCC'},{key:scrambleBests,label:'🧩 Scramble',color:'#9B59B6'},{key:flashBests,label:'🃏 Flashcards',color:'#27AE60'},{key:bubbleBests,label:'🫧 Bubble Pop',color:'#3498DB'}].forEach(m=>{
+    const best=Math.max(0,...Object.values(m.key||{}));
+    const div=document.createElement('div');div.style.cssText='background:#fff;border-radius:14px;padding:14px;border:2px solid #eee;text-align:center';
+    div.innerHTML='<div style="font-size:11px;font-weight:700;color:#aaa;margin-bottom:6px">'+m.label+'</div><div style="font-size:22px;font-weight:900;color:'+m.color+'">'+(best||'—')+'</div><div style="font-size:10px;color:#aaa;margin-top:2px">best pts</div>';
+    bests.appendChild(div);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   BADGES
+═══════════════════════════════════════════ */
+function checkBadges(){
+  ALL_BADGES.forEach(b=>{
+    if(!earnedBadges.includes(b.id)&&b.check()){earnedBadges.push(b.id);localStorage.setItem('lp_badges',JSON.stringify(earnedBadges));showBadgeToast(b);}
+  });
+}
+
+function showBadgeToast(badge){
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#5B2FCC;color:#fff;border-radius:14px;padding:12px 20px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(91,47,204,.4);white-space:nowrap';
+  t.innerHTML='<span style="font-size:22px">'+badge.icon+'</span> Badge unlocked: '+badge.name+'!';
+  document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
+}
+
+function renderBadges(){
+  const grid=document.getElementById('badgesGrid');grid.innerHTML='';
+  ALL_BADGES.forEach(b=>{
+    const earned=earnedBadges.includes(b.id);
+    const card=document.createElement('div');
+    card.style.cssText='background:#fff;border-radius:14px;padding:14px;border:2px solid '+(earned?'#FFD700':'#eee')+';text-align:center;'+(earned?'background:#FFFDF0':'opacity:0.5;filter:grayscale(.8)');
+    card.innerHTML='<div style="font-size:26px;margin-bottom:6px">'+b.icon+'</div><div style="font-size:12px;font-weight:800;color:#333;margin-bottom:3px">'+b.name+'</div><div style="font-size:10px;color:#888;line-height:1.4">'+b.desc+'</div>'+(earned?'<div style="font-size:10px;font-weight:700;color:#EF9F27;margin-top:5px">✓ Earned!</div>':'');
+    grid.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   WATCH
+═══════════════════════════════════════════ */
+function renderWatchTopics(){
+  const grid=document.getElementById('watchTopicsGrid');if(!grid)return;
+  grid.innerHTML='';
+  TOPICS.forEach(t=>{
+    const vids=VIDEOS[t.id]||[];
+    const card=document.createElement('div');
+    card.style.cssText='background:#fff;border-radius:14px;padding:18px 12px;border:2.5px solid #eee;cursor:pointer;text-align:center;transition:all .15s';
+    card.innerHTML='<div style="font-size:28px;margin-bottom:6px">'+t.icon+'</div><div style="font-size:13px;font-weight:800;color:#333;margin-bottom:4px">'+t.name+'</div><div style="font-size:11px;color:#5B2FCC;font-weight:700">📺 '+vids.length+' videos</div>';
+    card.onmouseenter=()=>{card.style.borderColor=t.color;card.style.boxShadow='0 5px 0 '+t.color;card.style.transform='translateY(-3px)';};
+    card.onmouseleave=()=>{card.style.borderColor='#eee';card.style.boxShadow='none';card.style.transform='none';};
+    card.onclick=()=>openVideoPlayer(t);grid.appendChild(card);
+  });
+}
+
+function openVideoPlayer(topic){currentVideoTopic=topic;currentVideoIdx=0;showScreen('videoScreen');renderVideoPlayer();}
+
+function renderVideoPlayer(){
+  const t=currentVideoTopic;const vids=VIDEOS[t.id]||[];
+  document.getElementById('videoHeader').innerHTML='<div style="display:flex;align-items:center;gap:10px"><span style="font-size:24px">'+t.icon+'</span><div><div style="font-size:16px;font-weight:900;color:#333">'+t.name+'</div><div style="font-size:12px;color:#aaa;font-weight:600">'+vids.length+' videos</div></div></div>';
+  const tabsEl=document.getElementById('videoTabs');tabsEl.innerHTML='';
+  vids.forEach((v,i)=>{
+    const btn=document.createElement('button');const active=i===currentVideoIdx;
+    btn.style.cssText='font-family:\'Nunito\',sans-serif;font-size:12px;font-weight:800;border-radius:99px;padding:6px 16px;cursor:pointer;border:2px solid '+(active?'#5B2FCC':'#ddd')+';background:'+(active?'#5B2FCC':'#fff')+';color:'+(active?'#fff':'#888')+';transition:all .12s';
+    btn.textContent='Video '+(i+1);
+    btn.onclick=()=>{currentVideoIdx=i;document.getElementById('videoFrame').src='';setTimeout(()=>renderVideoPlayer(),50);};tabsEl.appendChild(btn);
+  });
+  const v=vids[currentVideoIdx];
+  if(v){
+    document.getElementById('videoFrame').src='https://www.youtube.com/embed/'+v.id+'?rel=0&modestbranding=1';
+    const tagStyle={song:'background:#FAEEDA;color:#633806;border:1px solid #EF9F27',structure:'background:#EEEDFE;color:#3C3489;border:1px solid #AFA9EC',vocab:'background:#E1F5EE;color:#085041;border:1px solid #5DCAA5'};
+    const badges=v.tags.map(tag=>'<span style="font-size:10px;font-weight:700;border-radius:99px;padding:2px 9px;'+(tagStyle[tag]||tagStyle.vocab)+';display:inline-block;margin-right:4px;margin-top:4px">'+(tag==='song'?'🎵 Song':tag==='structure'?'📐 Structure':'📚 Vocab')+'</span>').join('');
+    document.getElementById('videoMeta').innerHTML='<div style="background:#fff;border-radius:13px;padding:13px 15px;border:2px solid #EDE5FF"><div style="font-size:11px;font-weight:700;color:#5B2FCC;margin-bottom:3px">'+v.channel+'</div><h3 style="font-size:14px;font-weight:800;color:#333;margin-bottom:5px">'+v.title+'</h3><p style="font-size:12px;color:#888;line-height:1.5">'+v.desc+'</p><div style="margin-top:6px">'+badges+'</div></div>';
+    document.getElementById('practiseBtn').textContent='Practise '+t.name+' 🎯';
+  }
+}
+
+function practiseFromVideo(){currentTopic=currentVideoTopic;nav('vocab');setTimeout(()=>startLearn(currentVideoTopic),100);}
+
+/* ═══════════════════════════════════════════
+   SPEED ROUND
+═══════════════════════════════════════════ */
+function openSpeedLobby(topic){
+  currentTopic=topic;const best=speedBests[topic.id]||0;
+  document.getElementById('speedLobby').innerHTML='<div style="text-align:center;padding:8px 0 20px"><div style="font-size:48px;margin-bottom:8px">⚡</div><h2 style="font-size:22px;font-weight:900;color:#5B2FCC;margin-bottom:8px">'+topic.icon+' '+topic.name+' — Speed Round</h2><p style="color:#888;font-size:14px;line-height:1.7;margin-bottom:18px">60 seconds. Answer fast. Build combos!</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px"><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #EDE5FF;text-align:center"><div style="font-size:20px;font-weight:900;color:#5B2FCC">60</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Seconds</div></div><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #EDE5FF;text-align:center"><div style="font-size:20px;font-weight:900;color:#5B2FCC">'+(best||'—')+'</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Your best</div></div><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #EDE5FF;text-align:center"><div style="font-size:20px;font-weight:900;color:#5B2FCC">x3</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Max combo</div></div></div><button onclick="startCountdown()" style="background:#5B2FCC;color:#fff;border:none;border-radius:14px;padding:13px 40px;font-family:\'Nunito\',sans-serif;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #3d1fa8">Go! ⚡</button></div>';
+  document.getElementById('speedGame').style.display='none';document.getElementById('speedResults').style.display='none';showScreen('speedScreen');
+}
+
+function startCountdown(){
+  document.getElementById('speedLobby').style.display='none';
+  const overlay=document.getElementById('countdownOverlay');overlay.style.display='flex';
+  document.getElementById('countdownNum').style.color='#5B2FCC';let n=3;
+  document.getElementById('countdownNum').textContent=n;document.getElementById('countdownLbl').textContent='Get ready!';
+  const iv=setInterval(()=>{n--;if(n===0){document.getElementById('countdownNum').textContent='GO!';document.getElementById('countdownNum').style.color='#00C9A7';setTimeout(()=>{clearInterval(iv);overlay.style.display='none';launchSpeed();},600);}else document.getElementById('countdownNum').textContent=n;},800);
+}
+
+function launchSpeed(){
+  speedTimeLeft=60;speedPoints=0;speedCombo=1;speedTopCombo=1;speedCorrectCount=0;
+  speedWordPool=shuffle([...currentTopic.words,...currentTopic.words,...currentTopic.words]);speedWIdx=0;
+  document.getElementById('speedGame').style.display='block';document.getElementById('speedResults').style.display='none';
+  updateSpeedHUD();updateTimerRing();loadSpeedWord();
+  speedTimer=setInterval(()=>{speedTimeLeft--;updateTimerRing();if(speedTimeLeft<=0){clearSpeedTimer();endSpeed();}},1000);
+}
+
+function clearSpeedTimer(){if(speedTimer){clearInterval(speedTimer);speedTimer=null;}}
+
+function updateTimerRing(){
+  const pct=speedTimeLeft/60,offset=175.9*(1-pct);
+  const ring=document.getElementById('timerRing'),num=document.getElementById('timerNum');
+  if(!ring)return;ring.style.strokeDashoffset=offset;const urgent=speedTimeLeft<=10;
+  ring.style.stroke=urgent?'#FF6B6B':'#5B2FCC';num.textContent=speedTimeLeft;num.style.color=urgent?'#FF6B6B':'#5B2FCC';
+}
+
+function updateSpeedHUD(){
+  document.getElementById('speedScore').textContent=speedPoints;
+  const badge=document.getElementById('comboBadge');if(!badge)return;
+  if(speedCombo>=3){badge.textContent='🔥 x3';badge.style.background='#5B2FCC';}
+  else if(speedCombo>=2){badge.textContent='✨ x2';badge.style.background='#A78BFA';}
+  else{badge.textContent='x1';badge.style.background='#A78BFA';}
+}
+
+function loadSpeedWord(){
+  if(speedWIdx>=speedWordPool.length){speedWordPool=shuffle([...currentTopic.words,...currentTopic.words,...currentTopic.words]);speedWIdx=0;}
+  const w=speedWordPool[speedWIdx++];const showEs=Math.random()>0.4;const correct=showEs?w.en:w.es;
+  document.getElementById('speedEmoji').textContent=w.emoji;document.getElementById('speedWord').textContent=showEs?w.es:w.en;
+  document.getElementById('speedPrompt').textContent=showEs?'What does this mean?':'How do you say this in Spanish?';
+  if(showEs){_currentWordES=w.es;setTimeout(()=>speakES(w.es),120);}else{_currentWordES=w.es;}
+  const wrongs=shuffle(currentTopic.words.filter(x=>x.es!==w.es)).slice(0,3).map(x=>showEs?x.en:x.es);
+  const opts=shuffle([correct,...wrongs]);const el=document.getElementById('speedChoices');el.innerHTML='';
+  opts.forEach(opt=>{const btn=document.createElement('button');btn.className='spd-choice';btn.textContent=opt;btn.onclick=()=>handleSpeedAnswer(opt,correct,btn,w);el.appendChild(btn);});
+}
+
+function handleSpeedAnswer(chosen,correct,btn,word){
+  document.querySelectorAll('.spd-choice').forEach(b=>b.disabled=true);
+  const ok=chosen===correct;const box=document.getElementById('speedWordBox');
+  if(ok){btn.classList.add('correct');box.style.borderColor='#00C9A7';box.style.background='#E0FAF4';speedCombo=Math.min(speedCombo+1,3);speedTopCombo=Math.max(speedTopCombo,speedCombo);const pts=10*speedCombo;speedPoints+=pts;speedCorrectCount++;xp+=5;streak++;if(currentTopic&&word)srsUpdateRecord(currentTopic.id,word.es,1);save();updateHeader();spawnFloat('+'+pts,btn,'#00C9A7');}
+  else{btn.classList.add('wrong');document.querySelectorAll('.spd-choice').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});box.style.borderColor='#FF6B6B';box.style.background='#FFE8E8';speedCombo=1;if(currentTopic&&word)srsUpdateRecord(currentTopic.id,word.es,0);streak=0;save();updateHeader();}
+  updateSpeedHUD();
+  setTimeout(()=>{box.style.borderColor='#EDE5FF';box.style.background='#fff';if(speedTimeLeft>0)loadSpeedWord();},ok?300:600);
+}
+
+function endSpeed(){
+  document.getElementById('speedGame').style.display='none';
+  const prev=speedBests[currentTopic.id]||0,isNew=speedPoints>prev;
+  if(isNew){speedBests[currentTopic.id]=speedPoints;save();}
+  let emoji='😊',title='Good effort!';
+  if(speedPoints>=200){emoji='🏆';title='¡Increíble!';confetti();}else if(speedPoints>=120){emoji='🌟';title='¡Muy bien!';}else if(speedPoints>=60){emoji='⚡';title='¡Bien hecho!';}
+  const res=document.getElementById('speedResults');res.style.display='block';
+  res.innerHTML='<span style="font-size:58px;display:block;margin-bottom:10px;animation:bounce .6s ease">'+emoji+'</span><div style="font-size:24px;font-weight:900;color:#5B2FCC;margin-bottom:4px">'+title+(isNew?' 🎉 New best!':'')+'</div><div style="font-size:52px;font-weight:900;color:#00C9A7;line-height:1;margin:8px 0">'+speedPoints+'</div><div style="font-size:13px;color:#aaa;margin-bottom:16px">points · '+speedCorrectCount+' correct</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button onclick="startCountdown()" style="background:#5B2FCC;color:#fff;border:none;border-radius:13px;padding:11px 22px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #3d1fa8">Play again ⚡</button><button onclick="goHome()" style="background:#fff;color:#5B2FCC;border:2.5px solid #5B2FCC;border-radius:13px;padding:11px 22px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer">Choose topic 🏠</button></div>';
+}
+
+/* ═══════════════════════════════════════════
+   SCRAMBLE
+═══════════════════════════════════════════ */
+function openScrambleLobby(topic){
+  currentTopic=topic;const best=scrambleBests[topic.id]||0;
+  document.getElementById('wsLobby').innerHTML='<div style="text-align:center;padding:8px 0 20px"><div style="font-size:48px;margin-bottom:8px">🧩</div><h2 style="font-size:22px;font-weight:900;color:#9B59B6;margin-bottom:8px">'+topic.icon+' '+topic.name+' — Scramble</h2><p style="color:#888;font-size:14px;line-height:1.7;margin-bottom:18px">Unscramble the letters to spell the Spanish word!</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px"><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #EDE8F8;text-align:center"><div style="font-size:20px;font-weight:900;color:#9B59B6">'+topic.words.length+'</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Words</div></div><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #EDE8F8;text-align:center"><div style="font-size:20px;font-weight:900;color:#9B59B6">'+(best||'—')+'</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Best score</div></div><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #EDE8F8;text-align:center"><div style="font-size:20px;font-weight:900;color:#9B59B6">❤️❤️❤️</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">3 lives</div></div></div><button onclick="launchScramble()" style="background:#9B59B6;color:#fff;border:none;border-radius:14px;padding:13px 40px;font-family:\'Nunito\',sans-serif;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #6c3483">Let\'s go! 🧩</button></div>';
+  document.getElementById('wsGame').style.display='none';document.getElementById('wsResults').style.display='none';showScreen('scrambleScreen');
+}
+
+function launchScramble(){
+  wsWords=shuffle([...currentTopic.words]);wsIdx=0;wsPoints=0;wsLives=3;wsCorrect=0;wsAnswered=false;
+  document.getElementById('wsLobby').style.display='none';document.getElementById('wsGame').style.display='block';document.getElementById('wsResults').style.display='none';renderWsWord();
+}
+
+function renderWsWord(){
+  if(wsIdx>=wsWords.length){endScramble();return;}wsAnswered=false;const w=wsWords[wsIdx];
+  const word=w.es.toLowerCase().replace(/\s/g,'');let letters=shuffle(word.split(''));let att=0;
+  while(letters.join('')===word&&att<20){letters=shuffle(word.split(''));att++;}
+  wsBankLetters=letters.map((l,i)=>({letter:l,id:i,used:false}));wsAnswerLetters=Array(word.length).fill(null);
+  document.getElementById('wsProgFill').style.width=((wsIdx/wsWords.length)*100)+'%';
+  document.getElementById('wsQCount').textContent=(wsIdx+1)+'/'+wsWords.length;
+  document.getElementById('wsPoints').textContent=wsPoints;
+  document.getElementById('wsLives').textContent='❤️'.repeat(wsLives)+'🖤'.repeat(Math.max(0,3-wsLives));
+  _currentWordES=w.es;
+  document.getElementById('wsEmoji').textContent=w.emoji;document.getElementById('wsEnglish').textContent=w.en;
+  document.getElementById('wsCard').style.cssText='background:#fff;border-radius:18px;padding:22px 18px;text-align:center;border:3px solid #EDE8F8;box-shadow:0 4px 0 #EDE8F8;margin-bottom:14px;transition:border-color .15s,background .15s';
+  document.getElementById('wsFeedback').style.display='none';document.getElementById('wsSubmitBtn').disabled=false;
+  renderWsAnswerRow(word);renderWsHint(word);renderWsBank();
+}
+
+function renderWsHint(word){document.getElementById('wsHint').textContent=wsAnswerLetters.map(l=>l?l.toUpperCase():'_').join(' ');}
+
+function renderWsAnswerRow(word){
+  const row=document.getElementById('wsAnswerRow');row.innerHTML='';
+  for(let i=0;i<word.length;i++){
+    const t=document.createElement('div');t.className='ws-tile'+(wsAnswerLetters[i]?'':' empty');t.textContent=wsAnswerLetters[i]||'';t.dataset.idx=i;t.onclick=()=>removeFromAnswer(i);row.appendChild(t);
+  }
+}
+
+function renderWsBank(){
+  const bank=document.getElementById('wsBank');bank.innerHTML='';
+  wsBankLetters.forEach((item,i)=>{const t=document.createElement('div');t.className='ws-bank-tile'+(item.used?' used':'');t.textContent=item.letter.toUpperCase();t.onclick=()=>addToAnswer(i);bank.appendChild(t);});
+}
+
+function addToAnswer(bankIdx){if(wsAnswered)return;const item=wsBankLetters[bankIdx];if(item.used)return;const slot=wsAnswerLetters.indexOf(null);if(slot===-1)return;wsAnswerLetters[slot]=item.letter;item.used=true;const word=wsWords[wsIdx].es.toLowerCase().replace(/\s/g,'');renderWsAnswerRow(word);renderWsHint(word);renderWsBank();}
+function removeFromAnswer(slotIdx){if(wsAnswered)return;if(wsAnswerLetters[slotIdx]===null)return;const letter=wsAnswerLetters[slotIdx];const bi=wsBankLetters.find(b=>b.used&&b.letter===letter);if(bi)bi.used=false;wsAnswerLetters[slotIdx]=null;const word=wsWords[wsIdx].es.toLowerCase().replace(/\s/g,'');renderWsAnswerRow(word);renderWsHint(word);renderWsBank();}
+function wsClear(){if(wsAnswered)return;wsAnswerLetters=wsAnswerLetters.map(()=>null);wsBankLetters.forEach(b=>b.used=false);const word=wsWords[wsIdx].es.toLowerCase().replace(/\s/g,'');renderWsAnswerRow(word);renderWsHint(word);renderWsBank();}
+
+function wsSubmit(){
+  if(wsAnswered)return;const w=wsWords[wsIdx];const word=w.es.toLowerCase().replace(/\s/g,'');
+  if(wsAnswerLetters.includes(null)){const c=document.getElementById('wsCard');c.style.borderColor='#FF6B6B';c.style.background='#FFE8E8';setTimeout(()=>{c.style.borderColor='#EDE8F8';c.style.background='#fff';},400);return;}
+  wsAnswered=true;document.getElementById('wsSubmitBtn').disabled=true;const attempt=wsAnswerLetters.join(''),ok=attempt===word;
+  const card=document.getElementById('wsCard');document.querySelectorAll('#wsAnswerRow .ws-tile').forEach(t=>t.classList.add(ok?'correct-tile':'wrong-tile'));
+  card.style.borderColor=ok?'#00C9A7':'#FF6B6B';card.style.background=ok?'#E0FAF4':'#FFE8E8';
+  if(ok){wsPoints+=20;wsCorrect++;xp+=12;streak++;if(currentTopic)srsUpdateRecord(currentTopic.id,w.es,1);save();updateHeader();spawnFloat('+20',card,'#00C9A7');}
+  else{wsLives--;if(currentTopic)srsUpdateRecord(currentTopic.id,w.es,0);streak=0;save();updateHeader();document.getElementById('wsLives').textContent='❤️'.repeat(Math.max(0,wsLives))+'🖤'.repeat(Math.max(0,3-wsLives));if(wsLives<=0){const fb=document.getElementById('wsFeedback');fb.style.cssText='border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:9px;font-weight:700;background:#FFE8E8;border:2px solid #FF6B6B;color:#CC3333';fb.innerHTML='<span style="font-size:20px">❌</span><span style="flex:1;font-size:13px">Game over! It was "'+w.es+'"</span>';setTimeout(()=>endScramble(),1400);return;}}
+  setTimeout(()=>speakES(w.es),300);
+  document.getElementById('wsPoints').textContent=wsPoints;
+  const fb=document.getElementById('wsFeedback');fb.style.cssText='border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:9px;font-weight:700;'+(ok?'background:#E0FAF4;border:2px solid #00C9A7;color:#007A6A':'background:#FFE8E8;border:2px solid #FF6B6B;color:#CC3333');
+  fb.innerHTML='<span style="font-size:20px">'+(ok?'✅':'❌')+'</span><span style="flex:1;font-size:13px">'+(ok?'¡Correcto! 🌟':'Not quite! It was "'+w.es+'"')+'</span><button onclick="wsNext()" style="background:#9B59B6;color:#fff;border:none;border-radius:9px;padding:6px 14px;font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">Next →</button>';
+}
+
+function wsNext(){wsIdx++;renderWsWord();}
+
+function endScramble(){
+  document.getElementById('wsGame').style.display='none';const prev=scrambleBests[currentTopic.id]||0,isNew=wsPoints>prev;
+  if(isNew){scrambleBests[currentTopic.id]=wsPoints;save();}
+  let emoji='😊',title='Good effort!';
+  if(wsCorrect>=8){emoji='🏆';title='¡Increíble!';confetti();}else if(wsCorrect>=6){emoji='🌟';title='¡Muy bien!';}else if(wsCorrect>=4){emoji='🧩';title='¡Bien hecho!';}
+  const res=document.getElementById('wsResults');res.style.display='block';
+  res.innerHTML='<span style="font-size:58px;display:block;margin-bottom:10px;animation:bounce .6s ease">'+emoji+'</span><div style="font-size:24px;font-weight:900;color:#9B59B6;margin-bottom:4px">'+title+(isNew?' 🎉 New best!':'')+'</div><div style="font-size:52px;font-weight:900;color:#00C9A7;line-height:1;margin:8px 0">'+wsPoints+'</div><div style="font-size:13px;color:#aaa;margin-bottom:16px">points · '+wsCorrect+' words correct</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button onclick="launchScramble()" style="background:#9B59B6;color:#fff;border:none;border-radius:13px;padding:11px 22px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #6c3483">Play again 🧩</button><button onclick="goHome()" style="background:#fff;color:#9B59B6;border:2.5px solid #9B59B6;border-radius:13px;padding:11px 22px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer">Choose topic 🏠</button></div>';
+}
+
+/* ═══════════════════════════════════════════
+   FLASHCARD
+═══════════════════════════════════════════ */
+function openFlashLobby(topic){
+  currentTopic=topic;const best=flashBests[topic.id]||0;
+  document.getElementById('fcLobby').innerHTML='<div style="text-align:center;padding:8px 0 20px"><div style="font-size:48px;margin-bottom:8px">🃏</div><h2 style="font-size:22px;font-weight:900;color:#27AE60;margin-bottom:8px">'+topic.icon+' '+topic.name+' — Flashcards</h2><p style="color:#888;font-size:14px;line-height:1.7;margin-bottom:18px">Tap to flip. Mark yourself honestly!</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px"><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #D5F0E0;text-align:center"><div style="font-size:20px;font-weight:900;color:#27AE60">'+topic.words.length+'</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Cards</div></div><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #D5F0E0;text-align:center"><div style="font-size:20px;font-weight:900;color:#27AE60">'+(best||'—')+'</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Best score</div></div><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #D5F0E0;text-align:center"><div style="font-size:20px;font-weight:900;color:#27AE60">♾️</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Repeats tricky</div></div></div><button onclick="launchFlash()" style="background:#27AE60;color:#fff;border:none;border-radius:14px;padding:13px 40px;font-family:\'Nunito\',sans-serif;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #1a7a42">Start! 🃏</button></div>';
+  document.getElementById('fcGame').style.display='none';document.getElementById('fcResults').style.display='none';showScreen('flashScreen');
+}
+
+function launchFlash(){fcDeck=shuffle([...currentTopic.words]);fcIdx=0;fcPoints=0;fcGot=0;fcRounds=1;fcFlipped=false;fcTrickyQueue=[];document.getElementById('fcLobby').style.display='none';document.getElementById('fcGame').style.display='block';document.getElementById('fcResults').style.display='none';renderFcCard();}
+
+function renderFcCard(){
+  const total=fcDeck.length;document.getElementById('fcProgFill').style.width=(fcIdx/total*100)+'%';
+  document.getElementById('fcQCount').textContent=(fcIdx+1)+'/'+total;document.getElementById('fcPoints').textContent=fcPoints;document.getElementById('fcRemain').textContent=fcTrickyQueue.length;
+  const card=document.getElementById('fcCard');
+  function applyWord(){const w=fcDeck[fcIdx];document.getElementById('fcFrontEmoji').textContent=w.emoji;document.getElementById('fcFrontWord').textContent=w.en;document.getElementById('fcBackEmoji').textContent=w.emoji;document.getElementById('fcBackWord').textContent=w.es;}
+  if(fcFlipped){fcFlipped=false;card.classList.remove('flipped');setTimeout(applyWord,580);}else applyWord();
+}
+
+function flipCard(){
+  fcFlipped=!fcFlipped;
+  document.getElementById('fcCard').classList.toggle('flipped',fcFlipped);
+  if(fcFlipped&&fcDeck[fcIdx]){_currentWordES=fcDeck[fcIdx].es;setTimeout(()=>speakES(fcDeck[fcIdx].es),350);}
+}
+
+function fcAnswer(gotIt){
+  if(!fcFlipped){flipCard();return;}
+  const w=fcDeck[fcIdx];
+  if(gotIt){fcPoints+=15;fcGot++;xp+=8;streak++;if(currentTopic)srsUpdateRecord(currentTopic.id,w.es,1);}
+  else{fcTrickyQueue.push(fcDeck[fcIdx]);if(currentTopic)srsUpdateRecord(currentTopic.id,w.es,0);streak=0;}
+  save();updateHeader();fcIdx++;
+  if(fcIdx>=fcDeck.length){if(fcTrickyQueue.length>0){fcDeck=shuffle(fcTrickyQueue);fcTrickyQueue=[];fcIdx=0;fcRounds++;renderFcCard();}else endFlash();}else renderFcCard();
+}
+
+function fcSkip(){fcIdx++;if(fcIdx>=fcDeck.length){if(fcTrickyQueue.length>0){fcDeck=shuffle(fcTrickyQueue);fcTrickyQueue=[];fcIdx=0;fcRounds++;}else{endFlash();return;}}renderFcCard();}
+
+function endFlash(){
+  document.getElementById('fcGame').style.display='none';const prev=flashBests[currentTopic.id]||0,isNew=fcPoints>prev;
+  if(isNew){flashBests[currentTopic.id]=fcPoints;save();}
+  let emoji='😊',title='Good effort!';const pct=fcGot/currentTopic.words.length;
+  if(pct>=0.9){emoji='🏆';title='¡Increíble!';confetti();}else if(pct>=0.7){emoji='🌟';title='¡Muy bien!';}
+  const res=document.getElementById('fcResults');res.style.display='block';
+  res.innerHTML='<span style="font-size:58px;display:block;margin-bottom:10px;animation:bounce .6s ease">'+emoji+'</span><div style="font-size:24px;font-weight:900;color:#27AE60;margin-bottom:4px">'+title+(isNew?' 🎉 New best!':'')+'</div><div style="font-size:52px;font-weight:900;color:#00C9A7;line-height:1;margin:8px 0">'+fcPoints+'</div><div style="font-size:13px;color:#aaa;margin-bottom:16px">points · '+fcGot+'/'+currentTopic.words.length+' got it · '+fcRounds+' round'+(fcRounds>1?'s':'')+'</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button onclick="launchFlash()" style="background:#27AE60;color:#fff;border:none;border-radius:13px;padding:11px 22px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #1a7a42">Play again 🃏</button><button onclick="goHome()" style="background:#fff;color:#27AE60;border:2.5px solid #27AE60;border-radius:13px;padding:11px 22px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer">Choose topic 🏠</button></div>';
+}
+
+/* ═══════════════════════════════════════════
+   BUBBLE POP
+═══════════════════════════════════════════ */
+const BUBBLE_COLORS=['#5B2FCC','#00C9A7','#9B59B6','#F39C12','#27AE60','#E74C3C','#3498DB','#A78BFA'];
+
+function openBubbleLobby(topic){
+  currentTopic=topic;const best=bubbleBests[topic.id]||0;
+  document.getElementById('bpLobby').innerHTML='<div style="text-align:center;padding:8px 0 20px"><div style="font-size:48px;margin-bottom:8px">🫧</div><h2 style="font-size:22px;font-weight:900;color:#3498DB;margin-bottom:8px">'+topic.icon+' '+topic.name+' — Bubble Pop</h2><p style="color:#888;font-size:14px;line-height:1.7;margin-bottom:18px">Tap the right bubble before it floats away!</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px"><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #D6EAF8;text-align:center"><div style="font-size:20px;font-weight:900;color:#3498DB">60</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Seconds</div></div><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #D6EAF8;text-align:center"><div style="font-size:20px;font-weight:900;color:#3498DB">'+(best||'—')+'</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">Your best</div></div><div style="background:#fff;border-radius:13px;padding:12px;border:2px solid #D6EAF8;text-align:center"><div style="font-size:20px;font-weight:900;color:#3498DB">❤️❤️❤️</div><div style="font-size:10px;color:#aaa;font-weight:700;margin-top:2px">3 lives</div></div></div><button onclick="startBpCountdown()" style="background:#3498DB;color:#fff;border:none;border-radius:14px;padding:13px 40px;font-family:\'Nunito\',sans-serif;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #1a6fa0">Pop! 🫧</button></div>';
+  document.getElementById('bpGame').style.display='none';document.getElementById('bpResults').style.display='none';showScreen('bubbleScreen');
+}
+
+function startBpCountdown(){
+  document.getElementById('bpLobby').style.display='none';
+  const overlay=document.getElementById('countdownOverlay');overlay.style.display='flex';document.getElementById('countdownNum').style.color='#3498DB';let n=3;
+  document.getElementById('countdownNum').textContent=n;document.getElementById('countdownLbl').textContent='Get ready!';
+  const iv=setInterval(()=>{n--;if(n===0){document.getElementById('countdownNum').textContent='POP!';setTimeout(()=>{clearInterval(iv);overlay.style.display='none';document.getElementById('countdownNum').style.color='#5B2FCC';launchBubble();},600);}else document.getElementById('countdownNum').textContent=n;},800);
+}
+
+function launchBubble(){
+  bpTimeLeft=60;bpPoints=0;bpLivesLeft=3;bpCorrect=0;bpAnswered=false;
+  bpWordPool=shuffle([...currentTopic.words,...currentTopic.words,...currentTopic.words]);bpWIdx=0;bpBubbles=[];
+  document.getElementById('bpGame').style.display='block';document.getElementById('bpResults').style.display='none';document.getElementById('bpArena').innerHTML='';
+  updateBpHud();loadBpWord();
+  bpTimer=setInterval(()=>{bpTimeLeft--;updateBpTimerRing();if(bpTimeLeft<=0){clearBpTimer();endBubble();}},1000);
+}
+
+function clearBpTimer(){if(bpTimer){clearInterval(bpTimer);bpTimer=null;}}
+
+function updateBpTimerRing(){
+  const pct=bpTimeLeft/60,offset=157*(1-pct);
+  const ring=document.getElementById('bpTimerRing'),num=document.getElementById('bpTimerNum');if(!ring)return;
+  ring.style.strokeDashoffset=offset;const urgent=bpTimeLeft<=10;ring.style.stroke=urgent?'#FF6B6B':'#3498DB';num.textContent=bpTimeLeft;num.style.color=urgent?'#FF6B6B':'#3498DB';
+}
+
+function updateBpHud(){
+  document.getElementById('bpScore').textContent=bpPoints;
+  document.getElementById('bpLives').textContent='❤️'.repeat(Math.max(0,bpLivesLeft))+'🖤'.repeat(Math.max(0,3-bpLivesLeft));
+}
+
+function loadBpWord(){
+  document.getElementById('bpArena').innerHTML='';bpBubbles=[];bpAnswered=false;
+  if(bpWIdx>=bpWordPool.length){bpWordPool=shuffle([...currentTopic.words,...currentTopic.words,...currentTopic.words]);bpWIdx=0;}
+  const w=bpWordPool[bpWIdx++];const showEs=Math.random()>0.4;
+  bpCorrectAnswer=showEs?w.en:w.es;
+  document.getElementById('bpWord').textContent=showEs?w.es:w.en;document.getElementById('bpPrompt').textContent=showEs?'What does this mean?':'How do you say this in Spanish?';
+  const wrongs=shuffle(currentTopic.words.filter(x=>x.es!==w.es)).slice(0,3).map(x=>showEs?x.en:x.es);
+  const opts=shuffle([bpCorrectAnswer,...wrongs]);const arena=document.getElementById('bpArena');const aW=arena.offsetWidth||300;
+  opts.forEach((opt,i)=>spawnBubble(opt,opt===bpCorrectAnswer,arena,aW,i,w));
+}
+
+function spawnBubble(text,isCorrect,arena,arenaW,idx,word){
+  const size=Math.min(arenaW*0.34,90);const bubble=document.createElement('div');bubble.className='bubble';
+  bubble.style.cssText='width:'+size+'px;height:'+size+'px;font-size:'+(size>75?12:10)+'px;background:'+BUBBLE_COLORS[idx%BUBBLE_COLORS.length]+';color:#fff;';
+  const slotW=arenaW/4;const cx=idx*slotW+slotW/2;const jx=(Math.random()-0.5)*12;
+  bubble.style.left=Math.max(4,Math.min(arenaW-size-4,cx-size/2+jx))+'px';bubble.style.bottom='4px';
+  const dur=(9+Math.random()*2).toFixed(1);bubble.style.animationDuration=dur+'s';bubble.style.animationDelay=(idx*0.3)+'s';
+  bubble.textContent=text;bubble.onclick=()=>popBubble(bubble,isCorrect,word);arena.appendChild(bubble);bpBubbles.push(bubble);
+  if(isCorrect){
+    setTimeout(()=>{
+      if(!bpAnswered&&bubble.isConnected){bpAnswered=true;bpLivesLeft--;updateBpHud();
+        if(currentTopic&&word)srsUpdateRecord(currentTopic.id,word.es,0);
+        streak=0;save();updateHeader();
+        if(bpLivesLeft<=0){clearBpTimer();setTimeout(endBubble,600);return;}setTimeout(()=>{if(bpTimeLeft>0)loadBpWord();},600);}
+    },(parseFloat(dur)+0.3)*1000);
+  }
+}
+
+function popBubble(bubble,isCorrect,word){
+  if(bpAnswered)return;bpAnswered=true;bubble.classList.add(isCorrect?'pop-correct':'pop-wrong');
+  if(isCorrect){bpPoints+=10;bpCorrect++;xp+=5;streak++;if(currentTopic&&word)srsUpdateRecord(currentTopic.id,word.es,1);save();updateHeader();spawnFloat('+10',bubble,'#00C9A7');}
+  else{bpLivesLeft--;if(currentTopic&&word)srsUpdateRecord(currentTopic.id,word.es,0);streak=0;save();updateHeader();}
+  updateBpHud();if(bpLivesLeft<=0){clearBpTimer();setTimeout(endBubble,700);return;}
+  setTimeout(()=>{if(bpTimeLeft>0)loadBpWord();},isCorrect?400:700);
+}
+
+function endBubble(){
+  clearBpTimer();document.getElementById('bpGame').style.display='none';
+  const prev=bubbleBests[currentTopic.id]||0,isNew=bpPoints>prev;if(isNew){bubbleBests[currentTopic.id]=bpPoints;save();}
+  let emoji='😊',title='Good effort!';
+  if(bpPoints>=120){emoji='🏆';title='¡Increíble!';confetti();}else if(bpPoints>=70){emoji='🌟';title='¡Muy bien!';}
+  const res=document.getElementById('bpResults');res.style.display='block';
+  res.innerHTML='<span style="font-size:58px;display:block;margin-bottom:10px;animation:bounce .6s ease">'+emoji+'</span><div style="font-size:24px;font-weight:900;color:#3498DB;margin-bottom:4px">'+title+(isNew?' 🎉 New best!':'')+'</div><div style="font-size:52px;font-weight:900;color:#00C9A7;line-height:1;margin:8px 0">'+bpPoints+'</div><div style="font-size:13px;color:#aaa;margin-bottom:16px">points scored</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button onclick="restartBubble()" style="background:#3498DB;color:#fff;border:none;border-radius:13px;padding:11px 22px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #1a6fa0">Play again 🫧</button><button onclick="goHome()" style="background:#fff;color:#3498DB;border:2.5px solid #3498DB;border-radius:13px;padding:11px 22px;font-family:\'Nunito\',sans-serif;font-size:14px;font-weight:800;cursor:pointer">Choose topic 🏠</button></div>';
+}
+
+function restartBubble(){startBpCountdown();}
+
+/* ═══════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   AUDIO — Web Speech API
+   speakES(text)  → reads Spanish aloud
+   speakEN(text)  → reads English aloud
+   audioEnabled   → user toggle (persisted)
+═══════════════════════════════════════════════ */
+let audioEnabled=localStorage.getItem('lp_audio')!=='off';
+let _esVoice=null,_enVoice=null,_voicesLoaded=false;
+
+function _loadVoices(){
+  if(_voicesLoaded)return;
+  const voices=speechSynthesis.getVoices();
+  if(!voices.length)return;
+  _voicesLoaded=true;
+  _esVoice=voices.find(v=>v.lang==='es-ES')||voices.find(v=>v.lang.startsWith('es'))||null;
+  _enVoice=voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'))||null;
+}
+
+if(typeof speechSynthesis!=='undefined'){
+  speechSynthesis.onvoiceschanged=_loadVoices;
+  _loadVoices();
+}
+
+let _lastSpoken='';
+let _forceReplay=false;
+let _currentWordES='';  // tracks the Spanish word currently on screen
+
+function replayLastWord(btn){
+  if(!_currentWordES)return;
+  if(!audioEnabled){toggleAudio();return;}
+  _forceReplay=true;
+  speakES(_currentWordES);
+  if(btn){btn.textContent='🔉';setTimeout(()=>{btn.textContent='▶️';},700);}
+}
+function _speak(text,voice,rate){
+  if(!audioEnabled)return;
+  if(typeof speechSynthesis==='undefined')return;
+  // Block auto-fires of the same word while it's playing, but allow forced replays
+  if(speechSynthesis.speaking&&_lastSpoken===text&&!_forceReplay)return;
+  _forceReplay=false;
+  speechSynthesis.cancel();
+  _lastSpoken=text;
+  const u=new SpeechSynthesisUtterance(text);
+  if(voice)u.voice=voice;
+  u.rate=rate||0.85;
+  u.pitch=1;u.volume=1;
+  u.onend=()=>{_lastSpoken='';};
+  speechSynthesis.speak(u);
+}
+
+function speakES(text){_loadVoices();_speak(text,_esVoice,0.8);}
+function speakEN(text){_loadVoices();_speak(text,_enVoice,0.9);}
+
+function toggleAudio(){
+  audioEnabled=!audioEnabled;
+  localStorage.setItem('lp_audio',audioEnabled?'on':'off');
+  if(!audioEnabled&&typeof speechSynthesis!=='undefined'){speechSynthesis.cancel();_lastSpoken='';}
+  updateAudioBtn();
+}
+
+function updateAudioBtnMe(){
+  const btn=document.getElementById('audioToggleBtnMe');
+  if(!btn)return;
+  btn.textContent=audioEnabled?'🔊 On':'🔇 Off';
+  btn.style.opacity=audioEnabled?'1':'0.6';
+}
+
+function updateAudioBtn(){
+  const btn=document.getElementById('audioToggleBtn');
+  if(!btn)return;
+  btn.textContent=audioEnabled?'\uD83D\uDD0A':'\uD83D\uDD07';
+  btn.style.opacity=audioEnabled?'1':'0.5';
+  btn.title=audioEnabled?'Audio on - tap to mute':'Audio off - tap to unmute';
+}
+
+function makeSpeakBtn(text,lang){
+  const btn=document.createElement('button');
+  btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 6px;vertical-align:middle;opacity:0.65;transition:opacity .12s;line-height:1';
+  btn.textContent='\uD83D\uDD0A';
+  btn.title=lang==='es'?'Hear the Spanish':'Hear the English';
+  btn.onclick=(e)=>{
+    e.stopPropagation();
+    if(!audioEnabled)return;
+    _forceReplay=true;
+    lang==='es'?speakES(text):speakEN(text);
+    btn.style.opacity='1';setTimeout(()=>{btn.style.opacity='0.65';},700);
+  };
+  btn.onmouseenter=()=>{btn.style.opacity='1';};
+  btn.onmouseleave=()=>{btn.style.opacity='0.65';};
+  return btn;
+}
+
+/* ═══════════════════════════════════════════
+   GRAMMAR MINI-LESSONS
+   Each topic: lesson card (rules + examples)
+   followed by a 5-question MC drill.
+   State: gramTopic, gramPhase ('lesson'|'drill'),
+          gramQIdx, gramScore, gramAnswered
+═══════════════════════════════════════════ */
+const GRAMMAR_TOPICS=[
+  {
+    id:'ser_estar',
+    name:'Ser vs Estar',
+    icon:'⚖️',
+    color:'#5B2FCC',
+    tagline:'Both mean "to be" — but used differently!',
+    rules:[
+      {rule:'Use SER for permanent things',examples:[
+        {es:'Soy inglés',en:'I am English'},
+        {es:'Ella es alta',en:'She is tall'},
+        {es:'Es un perro',en:'It is a dog'}
+      ]},
+      {rule:'Use ESTAR for temporary states & places',examples:[
+        {es:'Estoy cansado',en:'I am tired'},
+        {es:'Está en el parque',en:'He is in the park'},
+        {es:'Estamos contentos',en:'We are happy'}
+      ]}
+    ],
+    drill:[
+      {q:'I am English (permanent nationality)',opts:['Soy inglés','Estoy inglés','Es inglés','Estar inglés'],correct:0},
+      {q:'She is tired (temporary feeling)',opts:['Ella es cansada','Ella estoy cansada','Ella está cansada','Ella ser cansada'],correct:2},
+      {q:'The cat is in the garden (location)',opts:['El gato es en el jardín','El gato está en el jardín','El gato ser en el jardín','El gato estás en el jardín'],correct:1},
+      {q:'He is a doctor (permanent job)',opts:['Él está médico','Él eres médico','Él es médico','Él estoy médico'],correct:2},
+      {q:'We are happy today (temporary state)',opts:['Somos contentos','Estamos contentos','Están contentos','Sois contentos'],correct:1}
+    ]
+  },
+  {
+    id:'present_tense',
+    name:'Present tense',
+    icon:'🏃',
+    color:'#00C9A7',
+    tagline:'Regular -AR verbs in the present tense',
+    rules:[
+      {rule:'Remove -AR, then add these endings',examples:[
+        {es:'habl-o',en:'I speak'},
+        {es:'habl-as',en:'you speak'},
+        {es:'habl-a',en:'he/she speaks'},
+        {es:'habl-amos',en:'we speak'},
+        {es:'habl-áis',en:'you all speak'},
+        {es:'habl-an',en:'they speak'}
+      ]},
+      {rule:'Same pattern for other -AR verbs',examples:[
+        {es:'cantar → canto',en:'I sing'},
+        {es:'bailar → baila',en:'he/she dances'},
+        {es:'escuchar → escuchan',en:'they listen'}
+      ]}
+    ],
+    drill:[
+      {q:'"I speak" — hablar',opts:['hablo','hablas','habla','hablamos'],correct:0},
+      {q:'"She sings" — cantar',opts:['canto','cantas','canta','cantan'],correct:2},
+      {q:'"We listen" — escuchar',opts:['escucho','escuchas','escucha','escuchamos'],correct:3},
+      {q:'"They dance" — bailar',opts:['bailamos','bailan','bailas','bailo'],correct:1},
+      {q:'"You (tú) speak" — hablar',opts:['hablo','habla','hablas','hablamos'],correct:2}
+    ]
+  },
+  {
+    id:'gender',
+    name:'Gender & articles',
+    icon:'🔤',
+    color:'#EF9F27',
+    tagline:'Every Spanish noun is masculine or feminine',
+    rules:[
+      {rule:'Masculine nouns use el / un',examples:[
+        {es:'el perro',en:'the dog'},
+        {es:'un libro',en:'a book'},
+        {es:'el chico',en:'the boy'}
+      ]},
+      {rule:'Feminine nouns use la / una',examples:[
+        {es:'la chica',en:'the girl'},
+        {es:'una mesa',en:'a table'},
+        {es:'la manzana',en:'the apple'}
+      ]},
+      {rule:'Most nouns ending in -o are masculine; -a are feminine',examples:[
+        {es:'el gato / la gata',en:'the (male/female) cat'},
+        {es:'el amigo / la amiga',en:'the (male/female) friend'}
+      ]}
+    ],
+    drill:[
+      {q:'Which article goes with "perro" (dog)?',opts:['la perro','el perro','una perro','los perro'],correct:1},
+      {q:'Which article goes with "mesa" (table)?',opts:['el mesa','un mesa','la mesa','los mesa'],correct:2},
+      {q:'"A book" in Spanish',opts:['una libro','el libro','un libro','la libro'],correct:2},
+      {q:'Which is feminine?',opts:['el chico','el gato','el libro','la chica'],correct:3},
+      {q:'"The apple" in Spanish',opts:['el manzana','un manzana','una manzana','la manzana'],correct:3}
+    ]
+  },
+  {
+    id:'questions',
+    name:'Asking questions',
+    icon:'❓',
+    color:'#E74C3C',
+    tagline:'How to ask questions in Spanish',
+    rules:[
+      {rule:'Question words always have an accent',examples:[
+        {es:'¿Qué?',en:'What?'},
+        {es:'¿Quién?',en:'Who?'},
+        {es:'¿Dónde?',en:'Where?'},
+        {es:'¿Cuándo?',en:'When?'},
+        {es:'¿Por qué?',en:'Why?'},
+        {es:'¿Cómo?',en:'How?'}
+      ]},
+      {rule:'Spanish uses ¿ at the start AND ? at the end',examples:[
+        {es:'¿Cómo te llamas?',en:'What is your name?'},
+        {es:'¿Dónde vives?',en:'Where do you live?'},
+        {es:'¿Cuántos años tienes?',en:'How old are you?'}
+      ]}
+    ],
+    drill:[
+      {q:'How do you say "Where?" in Spanish?',opts:['Qué','Quién','Dónde','Cuándo'],correct:2},
+      {q:'How do you say "Why?" in Spanish?',opts:['Cómo','Por qué','Dónde','Qué'],correct:1},
+      {q:'Spanish questions start with...',opts:['!','¡','?','¿'],correct:3},
+      {q:'How do you say "How?" in Spanish?',opts:['Qué','Cuándo','Cómo','Quién'],correct:2},
+      {q:'"What is your name?" = ¿___ te llamas?',opts:['Dónde','Cuándo','Cómo','Por qué'],correct:2}
+    ]
+  },
+  {
+    id:'negatives',
+    name:'Making negatives',
+    icon:'🚫',
+    color:'#9B59B6',
+    tagline:'Saying "not" in Spanish is easy!',
+    rules:[
+      {rule:'Just put NO before the verb — that\'s it!',examples:[
+        {es:'Hablo español',en:'I speak Spanish'},
+        {es:'No hablo español',en:'I don\'t speak Spanish'},
+        {es:'Tengo un perro',en:'I have a dog'},
+        {es:'No tengo un perro',en:'I don\'t have a dog'}
+      ]},
+      {rule:'Common negative phrases',examples:[
+        {es:'No sé',en:'I don\'t know'},
+        {es:'No me gusta',en:'I don\'t like it'},
+        {es:'No hay',en:'There isn\'t / There aren\'t'}
+      ]}
+    ],
+    drill:[
+      {q:'"I don\'t speak Spanish" — where does NO go?',opts:['After the verb','Before the verb','At the end','It\'s not needed'],correct:1},
+      {q:'How do you say "I don\'t know"?',opts:['Sé no','No sé','No yo sé','Sé no yo'],correct:1},
+      {q:'"I don\'t have a dog" in Spanish',opts:['Tengo no un perro','No tengo un perro','Tengo un no perro','Un perro no tengo'],correct:1},
+      {q:'"I don\'t like it" in Spanish',opts:['Me no gusta','Gusta no me','No me gusta','Me gusta no'],correct:2},
+      {q:'Which sentence is correct?',opts:['Hablo no inglés','No hablo inglés','Hablo inglés no','Inglés no hablo'],correct:1}
+    ]
+  }
+];
+
+let gramTopic=null,gramPhase='menu',gramQIdx=0,gramScore=0,gramAnswered=false;
+
+function renderGrammarSection(){
+  const content=document.getElementById('grammarContent');
+  content.innerHTML='';
+  gramPhase='menu';
+
+  // Intro banner
+  const banner=document.createElement('div');
+  banner.style.cssText='background:linear-gradient(135deg,#5B2FCC,#7C5CBF);border-radius:18px;padding:18px 20px;margin-bottom:20px;color:#fff';
+  banner.innerHTML='<div style="font-size:15px;font-weight:900;margin-bottom:4px">📖 Grammar mini-lessons</div><div style="font-size:13px;opacity:.85">Read the lesson, then test yourself with 5 questions. Earn XP for each correct answer!</div>';
+  content.appendChild(banner);
+
+  // Topic grid
+  const label=document.createElement('div');
+  label.style.cssText='font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px';
+  label.textContent='Choose a topic';
+  content.appendChild(label);
+
+  const grid=document.createElement('div');
+  grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px';
+
+  GRAMMAR_TOPICS.forEach(t=>{
+    const done=localStorage.getItem('lp_gram_'+t.id);
+    const card=document.createElement('div');
+    card.className='gram-topic-card';
+    card.style.borderColor=done?'#00C9A7':'#EDE5FF';
+    card.innerHTML=`<div style="font-size:30px;margin-bottom:8px">${t.icon}</div><div style="font-size:13px;font-weight:800;color:#333;margin-bottom:4px;line-height:1.2">${t.name}</div><div style="font-size:11px;color:#aaa">${done?'✅ Completed':'Tap to learn'}</div>`;
+    card.onclick=()=>startGramLesson(t);
+    grid.appendChild(card);
+  });
+  content.appendChild(grid);
+}
+
+function startGramLesson(topic){
+  gramTopic=topic;gramPhase='lesson';gramQIdx=0;gramScore=0;gramAnswered=false;
+  const content=document.getElementById('grammarContent');
+  content.innerHTML='';
+
+  // Back button
+  const backRow=document.createElement('div');
+  backRow.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:16px';
+  const backBtn=document.createElement('button');
+  backBtn.className='back-btn';backBtn.textContent='← Topics';
+  backBtn.onclick=renderGrammarSection;
+  backRow.appendChild(backBtn);
+  const title=document.createElement('div');
+  title.style.cssText='font-size:17px;font-weight:900;color:'+topic.color;
+  title.textContent=topic.icon+' '+topic.name;
+  backRow.appendChild(title);
+  content.appendChild(backRow);
+
+  // Lesson card
+  const card=document.createElement('div');
+  card.className='gram-lesson-card';
+
+  const tagline=document.createElement('div');
+  tagline.style.cssText='font-size:15px;font-weight:800;color:#333;margin-bottom:14px;line-height:1.4';
+  tagline.textContent=topic.tagline;
+  card.appendChild(tagline);
+
+  topic.rules.forEach(r=>{
+    const ruleDiv=document.createElement('div');
+    ruleDiv.className='gram-rule';
+    ruleDiv.textContent=r.rule;
+    card.appendChild(ruleDiv);
+
+    r.examples.forEach(ex=>{
+      const row=document.createElement('div');
+      row.className='gram-example';
+      const esSpan=document.createElement('span');
+      esSpan.className='gram-es';
+      esSpan.textContent=ex.es;
+      const speakBtn=makeSpeakBtn(ex.es,'es');
+      const enSpan=document.createElement('span');
+      enSpan.className='gram-en';
+      enSpan.textContent=ex.en;
+      row.appendChild(esSpan);
+      row.appendChild(speakBtn);
+      row.appendChild(enSpan);
+      card.appendChild(row);
+    });
+  });
+  content.appendChild(card);
+
+  // Start drill button
+  const startBtn=document.createElement('button');
+  startBtn.className='btn btn-purple';
+  startBtn.style.cssText='width:100%;font-size:16px;padding:14px;margin-top:4px';
+  startBtn.textContent='Test yourself! ✏️';
+  startBtn.onclick=()=>startGramDrill(topic);
+  content.appendChild(startBtn);
+}
+
+function startGramDrill(topic){
+  gramTopic=topic;gramPhase='drill';gramQIdx=0;gramScore=0;gramAnswered=false;
+  renderGramDrillQuestion();
+}
+
+function renderGramDrillQuestion(){
+  const content=document.getElementById('grammarContent');
+  content.innerHTML='';
+
+  if(gramQIdx>=gramTopic.drill.length){endGramDrill();return;}
+
+  const q=gramTopic.drill[gramQIdx];gramAnswered=false;
+
+  // Progress bar
+  const progWrap=document.createElement('div');
+  progWrap.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:16px';
+  const bar=document.createElement('div');
+  bar.style.cssText='flex:1;height:10px;background:#EDE5FF;border-radius:99px;overflow:hidden';
+  const fill=document.createElement('div');
+  fill.style.cssText='height:100%;border-radius:99px;background:'+gramTopic.color+';width:'+Math.round((gramQIdx/gramTopic.drill.length)*100)+'%;transition:width .4s ease';
+  bar.appendChild(fill);progWrap.appendChild(bar);
+  const counter=document.createElement('div');
+  counter.style.cssText='font-size:12px;font-weight:700;color:#aaa;white-space:nowrap';
+  counter.textContent=(gramQIdx+1)+'/'+gramTopic.drill.length;
+  progWrap.appendChild(counter);
+  content.appendChild(progWrap);
+
+  // Score
+  const scoreRow=document.createElement('div');
+  scoreRow.style.cssText='display:flex;justify-content:space-between;margin-bottom:12px';
+  scoreRow.innerHTML='<div style="font-size:14px;font-weight:800;color:'+gramTopic.color+'">📖 '+gramTopic.name+'</div><div style="font-size:14px;font-weight:800;color:#5B2FCC">⭐ '+gramScore+' pts</div>';
+  content.appendChild(scoreRow);
+
+  // Question card
+  const qCard=document.createElement('div');
+  qCard.id='gramQCard';
+  qCard.style.cssText='background:#fff;border-radius:18px;padding:22px;border:3px solid #EDE5FF;box-shadow:0 4px 0 #EDE5FF;margin-bottom:14px;text-align:center';
+  qCard.innerHTML='<div style="display:inline-block;font-size:10px;font-weight:700;color:#5B2FCC;background:#F4F0FF;border-radius:99px;padding:3px 9px;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px">Grammar drill</div><div style="font-size:16px;font-weight:800;color:#333;line-height:1.5">'+q.q+'</div>';
+  content.appendChild(qCard);
+
+  // Options grid
+  const grid=document.createElement('div');
+  grid.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='gram-mc-btn';
+    btn.textContent=opt;
+    btn.onclick=()=>checkGramAnswer(i,q.correct,opt,btn,grid);
+    grid.appendChild(btn);
+  });
+  content.appendChild(grid);
+
+  // Feedback placeholder
+  const fb=document.createElement('div');
+  fb.id='gramFeedback';
+  content.appendChild(fb);
+}
+
+function checkGramAnswer(chosen,correct,chosenText,btn,grid){
+  if(gramAnswered)return;gramAnswered=true;
+  const ok=chosen===correct;
+  Array.from(grid.children).forEach((b,i)=>{
+    b.disabled=true;
+    if(i===correct)b.classList.add('correct');
+    else if(i===chosen&&!ok)b.classList.add('wrong');
+  });
+  const card=document.getElementById('gramQCard');
+  card.style.borderColor=ok?'#00C9A7':'#FF6B6B';
+  card.style.background=ok?'#E0FAF4':'#FFE8E8';
+  if(ok){gramScore++;xp+=12;streak++;}else{streak=0;}
+  save();updateHeader();
+  if(ok)spawnFloat('+12 XP',btn,'#5B2FCC');
+
+  // Speak the correct answer if it's a Spanish phrase
+  const correctText=gramTopic.drill[gramQIdx].opts[correct];
+  if(/[áéíóúüñ¿¡]/.test(correctText)||/^[A-Z][a-z]+ /.test(correctText)){
+    setTimeout(()=>speakES(correctText),400);
+  }
+
+  const fb=document.getElementById('gramFeedback');
+  fb.style.cssText='border-radius:13px;padding:13px 18px;display:flex;align-items:center;gap:10px;font-weight:700;margin-top:4px;'+(ok?'background:#E0FAF4;border:2px solid #00C9A7;color:#007A6A':'background:#FFE8E8;border:2px solid #FF6B6B;color:#CC3333');
+  fb.innerHTML='<span style="font-size:20px">'+(ok?'✅':'❌')+'</span><span style="flex:1;font-size:13px">'+(ok?'¡Correcto! 🌟':'Not quite — the correct answer is: <strong>'+gramTopic.drill[gramQIdx].opts[correct]+'</strong>')+'</span><button onclick="gramNext()" style="background:'+gramTopic.color+';color:#fff;border:none;border-radius:10px;padding:7px 14px;font-family:\'Nunito\',sans-serif;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">Next →</button>';
+}
+
+function gramNext(){gramQIdx++;renderGramDrillQuestion();}
+
+function endGramDrill(){
+  const content=document.getElementById('grammarContent');content.innerHTML='';
+  const pct=gramScore/gramTopic.drill.length;
+  let emoji='😊',title='Good effort!';
+  if(pct>=0.8){emoji='🏆';title='¡Brillante!';confetti();localStorage.setItem('lp_gram_'+gramTopic.id,'done');}
+  else if(pct>=0.6){emoji='🌟';title='¡Muy bien!';localStorage.setItem('lp_gram_'+gramTopic.id,'done');}
+  else{emoji='📖';title='Keep practising!';}
+
+  content.innerHTML=`
+    <div style="text-align:center;padding:20px 0">
+      <span style="font-size:64px;display:block;margin-bottom:12px;animation:bounce .6s ease">${emoji}</span>
+      <div style="font-size:26px;font-weight:900;color:${gramTopic.color};margin-bottom:6px">${title}</div>
+      <div style="font-size:48px;font-weight:900;color:#5B2FCC;margin:8px 0">${gramScore}/${gramTopic.drill.length}</div>
+      <div style="font-size:14px;color:#aaa;margin-bottom:20px">questions correct · +${gramScore*12} XP earned</div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button onclick="startGramDrill(gramTopic)" class="btn btn-purple">Try again ✏️</button>
+        <button onclick="startGramLesson(gramTopic)" style="background:#F4F0FF;border:2px solid #5B2FCC;color:#5B2FCC;border-radius:14px;padding:11px 22px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer">Review lesson 📖</button>
+        <button onclick="renderGrammarSection()" class="btn btn-outline">All topics</button>
+      </div>
+    </div>`;
+}
+
+function spawnFloat(text,anchor,color){
+  const el=document.createElement('div');el.className='float-score';el.textContent=text;el.style.color=color||'#00C9A7';
+  const r=anchor.getBoundingClientRect();el.style.left=(r.left+r.width/2-20)+'px';el.style.top=(r.top+window.scrollY-10)+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1000);
+}
+
+function confetti(){
+  const colors=['#5B2FCC','#00C9A7','#A78BFA','#F7A800','#E74C3C','#27AE60'];
+  for(let i=0;i<60;i++){const c=document.createElement('div');c.className='confetti-piece';const sz=Math.random()*10+5;c.style.cssText='width:'+sz+'px;height:'+sz+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';left:'+Math.random()*100+'vw;animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+Math.random()*.5+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3500);}
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+updateHeader();
+nav('home');
+</script>
+</body>
+</html>
